@@ -1,0 +1,73 @@
+Requirements
+============
+
+* parse a provided configuration file containing service information:
+    * human-readable service name (e.g. "Das Erste", "ARTE Deutschland")
+    * streaming URIs for IPTV recording
+    * URIs for TV listings (json.xmltv.se)
+
+* fetch JSON TV listings from json.xmltv.se
+
+* save structurized data from TV listings in database, at least:
+    * service identifier
+    * start time / end time
+    * program title
+    * episode information (in XMLTV format)
+
+* save recordings of IPTV streams (DVR functionality)
+    * for single programme
+    * for series (get all episodes)
+    
+* management of a recording library
+    * manage directory / file hierarchy for recordings
+    * provide information about existing recordings (e.g. episodes
+      already recorded for series recordings)
+
+* implement a network command server, supporting:
+    * querying TV listings (by title, service, time, ...)
+    * programming recordings
+    * programming series recordings
+    * querying existing recordings
+    * get streaming url for existing recordings
+
+Blocks
+======
+
+- Config
+  - readFromDisk
+  - getServices
+- ListingFetch
+  - fetch
+- ListingParse
+  - parse
+- ListingDb
+  - merge
+  - query
+  - cleanup
+- Library
+  - getPath (for new recording)
+  - query
+- Record
+  - startRecord
+  - stopRecord
+- TimerManager
+  - addSingleTimer
+  - addSeriesTimer
+  - onTimerEvent(start, stop)
+- CmdServer
+  - queryListing
+  - addSingleTimer
+  - addSeriesTimer
+  - queryLibrary
+  - getStreamingUrl
+
+- main:
+  -- Thread: CmdServer (listen & respond to network queries)
+      - triggered on remote request
+  -- Thread: TimerManager (manage timers, start / stop recordings)
+      - triggered by CmdServer (new request)
+      - triggered by ListingManager (new listings available)
+  -- Thread: ListingManager (periodically fetch & update DB)
+      - triggered periodically
+  -- invididual recording threads (supervising ffmpeg recording)
+      - started / stopped by TimerManager
