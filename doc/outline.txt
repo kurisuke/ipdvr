@@ -23,12 +23,25 @@ Requirements
     * provide information about existing recordings (e.g. episodes
       already recorded for series recordings)
 
-* implement a network command server, supporting:
+* implement a HTTP server with REST API, supporting:
     * querying TV listings (by title, service, time, ...)
     * programming recordings
     * programming series recordings
     * querying existing recordings
     * get streaming url for existing recordings
+
+Technologies
+============
+
+- JSON: rapidjson
+- listings download: libcurl
+- listings database: SQLite
+- RTP stream recording: ffmpeg, ffprobe
+  - ffprobe $url -show_streams -print_format json -loglevel 0
+  - ffmpeg $url -map $mapping -c:v copy -c:a copy $output.mkv
+  - alternative: use libav directly
+- HTTP Server: Crow
+  (JS Framework: React)
 
 Blocks
 ======
