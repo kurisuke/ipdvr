@@ -1,6 +1,6 @@
 /* ipdvr - DVR for IPTV streams
  *
- * Copyright (C) 2015  Peter Helbing
+ * Copyright (C) 2016  Peter Helbing
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,25 +18,35 @@
  *
  */
 
-#include "curlfetch.h"
+#ifndef CURLFETCH_H
+#define CURLFETCH_H
 
-#include <iostream>
+#include <string>
 
-int main(void)
+#include <curl/curl.h>
+
+class CurlFetch
 {
-    std::string url = "http://json.xmltv.se/";
-    auto fetcher = CurlFetch(url);
+public:
+    CurlFetch(std::string & sUrl);
+    ~CurlFetch();
 
-    bool res = fetcher.run();
+    bool run();
+    char* getData();
+    size_t getSize();
 
-    if (res == false)
-    {
-        std::cout << "Fetch failed from URL: " << url << std::endl;
-    }
-    else
-    {
-        std::cout << "Read " << fetcher.getSize() << " bytes from URL: " << url << std::endl;
-    }
+private:
+    static size_t cbWrite(void *src, size_t size, size_t nmemb, void *dest);
 
-    return 0;
-}
+    struct FetchResult {
+        char* pData;
+        size_t size;
+    };
+
+    struct FetchResult m_fetchResult;
+
+    static bool m_bCurlGlobalInit;
+    CURL* m_hCurl;
+};
+
+#endif // CURLFETCH_H
