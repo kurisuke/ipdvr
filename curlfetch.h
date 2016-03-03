@@ -18,8 +18,8 @@
  *
  */
 
-#ifndef CURLFETCH_H
-#define CURLFETCH_H
+#ifndef IPDVR_CURLFETCH_H
+#define IPDVR_CURLFETCH_H
 
 #include <string>
 
@@ -49,4 +49,4 @@ private:
     CURL* m_hCurl;
 };
 
-#endif // CURLFETCH_H
+#endif // IPDVR_CURLFETCH_H
