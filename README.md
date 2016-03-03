@@ -12,12 +12,21 @@ Planned Features
 * scheduling of single and series recordings
 * library management of recordings
 
-Build system: CMake
-Listings DB: sqlite
-All things JSON: rapidjson
+- Build system: CMake
+- Listings DB: sqlite
+- All things JSON: rapidjson
 
 Status
 ------
 
 This project is in planning / design stage. See doc/outline.txt for a
 detailed list of requirements / proposed building blocks.
+
+Attributions
+------------
+
+ipdvr includes the following 3rd-party libraries:
+
+- rapidjson/* -- JSON parser
+    - https://github.com/miloyip/rapidjson
+    - license: COPYING.rapidjson
