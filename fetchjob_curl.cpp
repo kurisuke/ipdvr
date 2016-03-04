@@ -18,14 +18,14 @@
  *
  */
 
-#include "curlfetch.h"
+#include "fetchjob_curl.h"
 
 #include <cstdlib>
 #include <cstring>
 
-bool CurlFetch::m_bCurlGlobalInit = false;
+bool FetchJob_Curl::m_bCurlGlobalInit = false;
 
-CurlFetch::CurlFetch(std::string & sUrl)
+FetchJob_Curl::FetchJob_Curl(std::string & sUrl)
     : m_fetchResult(),
       m_hCurl(0)
 {
@@ -46,14 +46,14 @@ CurlFetch::CurlFetch(std::string & sUrl)
     curl_easy_setopt(m_hCurl, CURLOPT_WRITEDATA, (void*) &m_fetchResult);
 }
 
-CurlFetch::~CurlFetch()
+FetchJob_Curl::~FetchJob_Curl()
 {
     curl_easy_cleanup(m_hCurl);
 
     free(m_fetchResult.pData);
 }
 
-bool CurlFetch::run()
+bool FetchJob_Curl::run()
 {
     CURLcode res = curl_easy_perform(m_hCurl);
 
@@ -67,17 +67,17 @@ bool CurlFetch::run()
     }
 }
 
-size_t CurlFetch::getSize()
+size_t FetchJob_Curl::getSize()
 {
     return m_fetchResult.size;
 }
 
-char* CurlFetch::getData()
+char* FetchJob_Curl::getData()
 {
     return m_fetchResult.pData;
 }
 
-size_t CurlFetch::cbWrite(void *src, size_t size, size_t nmemb, void *dest)
+size_t FetchJob_Curl::cbWrite(void *src, size_t size, size_t nmemb, void *dest)
 {
     size_t realsize = size * nmemb;
     struct FetchResult* fetchResult = (struct FetchResult*) dest;

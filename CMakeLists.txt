@@ -2,7 +2,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 PROJECT(ipdvr)
 
 SET(SOURCES
-    curlfetch.cpp
+    fetchjob_curl.cpp
     main.cpp
     )
 

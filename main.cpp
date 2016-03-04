@@ -18,7 +18,7 @@
  *
  */
 
-#include "curlfetch.h"
+#include "fetchjob_curl.h"
 
 #include "debug.h"
 
@@ -27,7 +27,7 @@
 int main(void)
 {
     std::string url = "http://json.xmltv.se/mdr.daserste.de_2016-03-01.js.gz";
-    auto fetcher = CurlFetch(url);
+    auto fetcher = FetchJob_Curl(url);
 
     bool res = fetcher.run();
 

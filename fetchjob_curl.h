@@ -18,18 +18,18 @@
  *
  */
 
-#ifndef IPDVR_CURLFETCH_H
-#define IPDVR_CURLFETCH_H
+#ifndef IPDVR_FETCHJOB_CURL_H
+#define IPDVR_FETCHJOB_CURL_H
 
 #include <string>
 
 #include <curl/curl.h>
 
-class CurlFetch
+class FetchJob_Curl
 {
 public:
-    CurlFetch(std::string & sUrl);
-    ~CurlFetch();
+    FetchJob_Curl(std::string & sUrl);
+    ~FetchJob_Curl();
 
     bool run();
     char* getData();
@@ -49,4 +49,4 @@ private:
     CURL* m_hCurl;
 };
 
-#endif // IPDVR_CURLFETCH_H
+#endif // IPDVR_FETCHJOB_CURL_H
