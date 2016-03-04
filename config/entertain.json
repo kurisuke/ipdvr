@@ -1,0 +1,36 @@
+{
+    "ipdvrConfig": {
+	"channels": [
+	    {
+		"name": "Das Erste",
+		"streamUrl": "rtp://@239.35.10.1:10000",
+		"listingType": "json.xmltv.se",
+		"listingName": "daserste.de"
+	    },
+	    {
+		"name": "ZDF",
+		"streamUrl": "rtp://@239.35.10.2:10000",
+		"listingType": "json.xmltv.se",
+		"listingName": "zdf.de"
+	    },
+	    {
+		"name": "RTL",
+		"streamUrl": "rtp://@239.35.20.10:10000",
+		"listingType": "json.xmltv.se",
+		"listingName": "rtl.de"
+	    },
+	    {
+		"name": "Sat.1",
+		"streamUrl": "rtp://@239.35.20.20:10000",
+		"listingType": "json.xmltv.se",
+		"listingName": "sat1.de"
+	    },
+	    {
+		"name": "ProSieben",
+		"streamUrl": "rtp://@239.35.20.21:10000",
+		"listingType": "json.xmltv.se",
+		"listingName": "prosieben.de"
+	    }
+	]
+    }
+}

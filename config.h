@@ -1,6 +1,6 @@
 /* ipdvr - DVR for IPTV streams
  *
- * Copyright (C) 2015  Peter Helbing
+ * Copyright (C) 2016  Peter Helbing
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,18 +18,21 @@
  *
  */
 
-#include "config.h"
-#include "listingfetch.h"
+#ifndef IPDVR_CONFIG_H
+#define IPDVR_CONFIG_H
 
-#include <iostream>
+#include <string>
 
-int main(void)
+class Config
 {
-    std::string configPath = "../config/entertain.json";
-    Config config(configPath);
-    config.parse();
+public:
+    Config(std::string path);
+    ~Config();
 
-    std::string url = "http://json.xmltv.se/mdr.daserste.de_2016-03-01.js.gz";
-    ListingFetch listingFetch;
-    auto spJsonDoc = listingFetch.fetch(url);
-}
+    bool parse();
+private:
+
+    std::string m_path;
+};
+
+#endif // IPDVR_CONFIG_H
