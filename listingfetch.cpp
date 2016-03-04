@@ -24,7 +24,6 @@
 #include "fetchjob_curl.h"
 
 #include <curl/curl.h>
-#include <memory>
 
 ListingFetch::ListingFetch()
 {
@@ -36,20 +35,33 @@ ListingFetch::~ListingFetch()
     curl_global_cleanup();
 }
 
-bool ListingFetch::fetch(std::string singleUrl)
+std::shared_ptr<rapidjson::Document> ListingFetch::fetch(std::string singleUrl)
 {
-    std::unique_ptr<FetchJob_Curl> fetcher(new FetchJob_Curl(singleUrl));
+    std::unique_ptr<FetchJob_Curl> pFetcher(new FetchJob_Curl(singleUrl));
 
-    bool res = fetcher->run();
+    bool res = pFetcher->run();
 
     if (res == false)
     {
         DEBUG_PRINT("Fetch failed from URL: " << singleUrl << std::endl);
-        return false;
+        return nullptr;
     }
     else
     {
-        DEBUG_PRINT("Read " << fetcher->getSize() << " bytes from URL: " << singleUrl << std::endl);
-        return true;
+        DEBUG_PRINT("Read " << pFetcher->getSize() << " bytes from URL: " << singleUrl << std::endl);
+    }
+
+    auto spJsonDoc = std::make_shared<rapidjson::Document>();
+    spJsonDoc->Parse(pFetcher->getData());
+
+    if (spJsonDoc->IsObject() && spJsonDoc->HasMember("jsontv"))
+    {
+        DEBUG_PRINT("Parsed a valid JSONTV document." << std::endl);
+        return spJsonDoc;
+    }
+    else
+    {
+        DEBUG_PRINT("JSON parse failed!" << std::endl);
+        return nullptr;
     }
 }

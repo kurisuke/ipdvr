@@ -26,5 +26,5 @@ int main(void)
 {
     std::string url = "http://json.xmltv.se/mdr.daserste.de_2016-03-01.js.gz";
     ListingFetch listingFetch;
-    listingFetch.fetch(url);
+    auto spJsonDoc = listingFetch.fetch(url);
 }

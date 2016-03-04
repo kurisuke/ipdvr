@@ -21,6 +21,8 @@
 #ifndef IPDVR_LISTINGFETCH_H
 #define IPDVR_LISTINGFETCH_H
 
+#include <memory>
+#include "rapidjson/document.h"
 #include <string>
 
 class ListingFetch
@@ -29,7 +31,7 @@ public:
     ListingFetch();
     ~ListingFetch();
 
-    bool fetch(std::string singleUrl);
+    std::shared_ptr<rapidjson::Document> fetch(std::string singleUrl);
 };
 
 #endif // IPDVR_LISTINGFETCH_H
