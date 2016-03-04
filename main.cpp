@@ -18,27 +18,13 @@
  *
  */
 
-#include "fetchjob_curl.h"
-
-#include "debug.h"
+#include "listingfetch.h"
 
 #include <iostream>
 
 int main(void)
 {
     std::string url = "http://json.xmltv.se/mdr.daserste.de_2016-03-01.js.gz";
-    auto fetcher = FetchJob_Curl(url);
-
-    bool res = fetcher.run();
-
-    if (res == false)
-    {
-        DEBUG_PRINT("Fetch failed from URL: " << url << std::endl);
-    }
-    else
-    {
-        DEBUG_PRINT("Read " << fetcher.getSize() << " bytes from URL: " << url << std::endl);
-    }
-
-    return 0;
+    ListingFetch listingFetch;
+    listingFetch.fetch(url);
 }

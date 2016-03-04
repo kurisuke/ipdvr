@@ -18,34 +18,18 @@
  *
  */
 
-#ifndef IPDVR_FETCHJOB_CURL_H
-#define IPDVR_FETCHJOB_CURL_H
+#ifndef IPDVR_LISTINGFETCH_H
+#define IPDVR_LISTINGFETCH_H
 
 #include <string>
 
-#include <curl/curl.h>
-
-class FetchJob_Curl
+class ListingFetch
 {
 public:
-    FetchJob_Curl(std::string & sUrl);
-    ~FetchJob_Curl();
+    ListingFetch();
+    ~ListingFetch();
 
-    bool run();
-    char* getData();
-    size_t getSize();
-
-private:
-    static size_t cbWrite(void *src, size_t size, size_t nmemb, void *dest);
-
-    struct FetchResult {
-        char* pData;
-        size_t size;
-    };
-
-    struct FetchResult m_fetchResult;
-
-    CURL* m_hCurl;
+    bool fetch(std::string singleUrl);
 };
 
-#endif // IPDVR_FETCHJOB_CURL_H
+#endif // IPDVR_LISTINGFETCH_H

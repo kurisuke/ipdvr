@@ -3,6 +3,7 @@ PROJECT(ipdvr)
 
 SET(SOURCES
     fetchjob_curl.cpp
+    listingfetch.cpp
     main.cpp
     )
 

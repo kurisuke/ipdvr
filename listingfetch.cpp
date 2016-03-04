@@ -18,34 +18,38 @@
  *
  */
 
-#ifndef IPDVR_FETCHJOB_CURL_H
-#define IPDVR_FETCHJOB_CURL_H
+#include "listingfetch.h"
 
-#include <string>
+#include "debug.h"
+#include "fetchjob_curl.h"
 
 #include <curl/curl.h>
+#include <memory>
 
-class FetchJob_Curl
+ListingFetch::ListingFetch()
 {
-public:
-    FetchJob_Curl(std::string & sUrl);
-    ~FetchJob_Curl();
+    curl_global_init(CURL_GLOBAL_ALL);
+}
 
-    bool run();
-    char* getData();
-    size_t getSize();
+ListingFetch::~ListingFetch()
+{
+    curl_global_cleanup();
+}
 
-private:
-    static size_t cbWrite(void *src, size_t size, size_t nmemb, void *dest);
+bool ListingFetch::fetch(std::string singleUrl)
+{
+    std::unique_ptr<FetchJob_Curl> fetcher(new FetchJob_Curl(singleUrl));
 
-    struct FetchResult {
-        char* pData;
-        size_t size;
-    };
+    bool res = fetcher->run();
 
-    struct FetchResult m_fetchResult;
-
-    CURL* m_hCurl;
-};
-
-#endif // IPDVR_FETCHJOB_CURL_H
+    if (res == false)
+    {
+        DEBUG_PRINT("Fetch failed from URL: " << singleUrl << std::endl);
+        return false;
+    }
+    else
+    {
+        DEBUG_PRINT("Read " << fetcher->getSize() << " bytes from URL: " << singleUrl << std::endl);
+        return true;
+    }
+}

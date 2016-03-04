@@ -23,18 +23,10 @@
 #include <cstdlib>
 #include <cstring>
 
-bool FetchJob_Curl::m_bCurlGlobalInit = false;
-
 FetchJob_Curl::FetchJob_Curl(std::string & sUrl)
     : m_fetchResult(),
       m_hCurl(0)
 {
-    if (m_bCurlGlobalInit == false)
-    {
-         curl_global_init(CURL_GLOBAL_ALL);
-         m_bCurlGlobalInit = true;
-    }
-
     m_hCurl = curl_easy_init();
 
     curl_easy_setopt(m_hCurl, CURLOPT_URL, sUrl.c_str());
