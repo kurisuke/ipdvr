@@ -104,8 +104,7 @@ bool Config::parse()
 
         if (jsonDoc.IsObject() && jsonDoc.HasMember("ipdvrConfig"))
         {
-            DEBUG_PRINT("Parsed a valid config file: " << m_path << std::endl);
-            // TODO: save content to Config members
+            DEBUG_PRINT("Found a valid ipdvrConfig root tag in file: " << m_path << std::endl);
         }
         else
         {
