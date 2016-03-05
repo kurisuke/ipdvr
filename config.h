@@ -21,6 +21,8 @@
 #ifndef IPDVR_CONFIG_H
 #define IPDVR_CONFIG_H
 
+#include "channeldata.h"
+
 #include <string>
 
 class Config
@@ -33,6 +35,8 @@ public:
 private:
 
     std::string m_path;
+
+    ChannelData::StdList m_channelDataList;
 };
 
 #endif // IPDVR_CONFIG_H

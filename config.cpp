@@ -23,6 +23,7 @@
 #include "debug.h"
 
 #include <fstream>
+#include <map>
 #include "rapidjson/document.h"
 #include <sstream>
 
@@ -33,6 +34,57 @@ Config::Config(std::string path) :
 
 Config::~Config()
 {
+}
+
+ChannelData::StdList parseChannels(const rapidjson::Value& channelsroot)
+{
+    ChannelData::StdList ret;
+
+    if (!channelsroot.IsArray())
+    {
+        DEBUG_PRINT("Not a channels array, parsing failed.");
+        return ret;
+    }
+
+    static const std::map<const std::string, ChannelData::ListingType> listingTypeMap =
+    {
+        {"json.xmltv.se", ChannelData::ListingType::JsonXmltvSe}
+    };
+
+    for (rapidjson::Value::ConstValueIterator it = channelsroot.Begin(); it != channelsroot.End(); ++it)
+    {
+        if(it->IsObject())
+        {
+            if ((it->HasMember("name")) &&
+                (it->HasMember("streamUrl")) &&
+                (it->HasMember("listingType")) &&
+                (it->HasMember("listingName")))
+            {
+                const std::string listingTypeStr = (*it)["listingType"].GetString();
+
+                if (listingTypeMap.count(listingTypeStr))
+                {
+                    const std::string name = (*it)["name"].GetString();
+                    const std::string streamUrl = (*it)["streamUrl"].GetString();
+                    const ChannelData::ListingType listingType = listingTypeMap.at(listingTypeStr);
+                    const std::string listingName = (*it)["listingName"].GetString();
+
+                    ret.push_back(ChannelData(name, streamUrl, listingType, listingName));
+                    DEBUG_PRINT("Added new channel entry: " << name << std::endl);
+                }
+                else
+                {
+                    DEBUG_PRINT("Found invalid listing type: " << listingTypeStr << " , skipping..." << std::endl);
+                }
+            }
+            else
+            {
+                DEBUG_PRINT("Found incomplete channel entry, skipping..." << std::endl);
+            }
+        }
+    }
+
+    return ret;
 }
 
 bool Config::parse()
@@ -54,11 +106,23 @@ bool Config::parse()
         {
             DEBUG_PRINT("Parsed a valid config file: " << m_path << std::endl);
             // TODO: save content to Config members
-            return true;
         }
         else
         {
             DEBUG_PRINT("Error parsing config file: " << m_path << std::endl);
+            return false;
+        }
+
+        const rapidjson::Value& rootNode = jsonDoc["ipdvrConfig"];
+        if (rootNode.HasMember("channels"))
+        {
+            m_channelDataList = parseChannels(rootNode["channels"]);
+            DEBUG_PRINT("Parsed a channel list with " << m_channelDataList.size() << " entries." << std::endl);
+            return true;
+        }
+        else
+        {
+            DEBUG_PRINT("No channels defined!" << std::endl);
             return false;
         }
 
