@@ -58,7 +58,7 @@ std::shared_ptr<rapidjson::Document> ListingFetch_XmltvSe::fetchUrl(std::string 
 
     if (res == false)
     {
-        DEBUG_PRINT("Fetch failed from URL: " << singleUrl << std::endl);
+        ERROR_PRINT("Fetch failed from URL: " << singleUrl << std::endl);
         return nullptr;
     }
     else
@@ -76,7 +76,7 @@ std::shared_ptr<rapidjson::Document> ListingFetch_XmltvSe::fetchUrl(std::string 
     }
     else
     {
-        DEBUG_PRINT("JSON parse failed!" << std::endl);
+        ERROR_PRINT("JSON parse failed!" << std::endl);
         return nullptr;
     }
 }

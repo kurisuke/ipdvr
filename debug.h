@@ -22,10 +22,12 @@
 #define IPDVR_DEBUG_H
 
 #include <iostream>
+#include <cstring>
+
+#define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
+#define ERROR_PRINT(x) do { std::cerr << "[" << __FILENAME__ << ":" << __LINE__ << "] " << x; } while (0)
 
 #ifdef DEBUG
-#   include <cstring>
-#   define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
 #   define DEBUG_PRINT(x) do { std::cerr << "[" << __FILENAME__ << ":" << __LINE__ << "] " << x; } while (0)
 #else
 #   define DEBUG_PRINT(x)

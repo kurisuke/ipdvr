@@ -43,7 +43,7 @@ ChannelData::StdList parseChannels(const rapidjson::Value& channelsroot)
 
     if (!channelsroot.IsArray())
     {
-        DEBUG_PRINT("Not a channels array, parsing failed.");
+        ERROR_PRINT("Not a channels array, parsing failed.");
         return ret;
     }
 
@@ -75,12 +75,12 @@ ChannelData::StdList parseChannels(const rapidjson::Value& channelsroot)
                 }
                 else
                 {
-                    DEBUG_PRINT("Found invalid listing type: " << listingTypeStr << " , skipping..." << std::endl);
+                    ERROR_PRINT("Found invalid listing type: " << listingTypeStr << " , skipping..." << std::endl);
                 }
             }
             else
             {
-                DEBUG_PRINT("Found incomplete channel entry, skipping..." << std::endl);
+                ERROR_PRINT("Found incomplete channel entry, skipping..." << std::endl);
             }
         }
     }
@@ -109,7 +109,7 @@ bool Config::parse()
         }
         else
         {
-            DEBUG_PRINT("Error parsing config file: " << m_path << std::endl);
+            ERROR_PRINT("Error parsing config file: " << m_path << std::endl);
             return false;
         }
 
@@ -122,7 +122,7 @@ bool Config::parse()
         }
         else
         {
-            DEBUG_PRINT("No channels defined!" << std::endl);
+            ERROR_PRINT("No channels defined!" << std::endl);
             return false;
         }
 
