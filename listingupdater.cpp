@@ -1,6 +1,6 @@
 /* ipdvr - DVR for IPTV streams
  *
- * Copyright (C) 2015  Peter Helbing
+ * Copyright (C) 2016  Peter Helbing
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,19 +18,24 @@
  *
  */
 
-#include "config.h"
 #include "listingupdater.h"
 
-#include <iostream>
-#include <memory>
+#include "debug.h"
+#include "listingfetch_xmltvse.h"
 
-int main(void)
+ListingUpdater::ListingUpdater(std::shared_ptr<Config> spConfig)
+    : m_spConfig(spConfig)
 {
-    std::string configPath = "../config/entertain.json";
-    auto spConfig = std::make_shared<Config>(configPath);
-    spConfig->parse();
 
-    auto spListingUpdater = std::make_shared<ListingUpdater>(spConfig);
-    spListingUpdater->updateAll();
+}
 
+void ListingUpdater::updateAll()
+{
+    const auto& channelDataList = m_spConfig->getChannelData();
+
+    for (const auto& channelData : channelDataList)
+    {
+        ListingFetch_XmltvSe fetcher(channelData);
+        auto programmes = fetcher.fetch();
+    }
 }

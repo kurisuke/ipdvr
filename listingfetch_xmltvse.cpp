@@ -29,7 +29,7 @@
 
 #include <sstream>
 
-ListingFetch_XmltvSe::ListingFetch_XmltvSe(ChannelData channelData, const std::string &defaultLanguage)
+ListingFetch_XmltvSe::ListingFetch_XmltvSe(const ChannelData& channelData, const std::string &defaultLanguage)
   : m_channelData(channelData),
     m_defaultLanguage(defaultLanguage)
 {

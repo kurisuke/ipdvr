@@ -147,3 +147,8 @@ ChannelData Config::getChannelData(const std::string& name)
         return ChannelData(); // invalid default object
     }
 }
+
+const ChannelData::StdList& Config::getChannelData()
+{
+    return m_channelDataList;
+}

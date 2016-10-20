@@ -32,7 +32,7 @@
 class ListingFetch_XmltvSe
 {
 public:
-    ListingFetch_XmltvSe(ChannelData channelData, const std::string& defaultLanguage="de");
+    ListingFetch_XmltvSe(const ChannelData& channelData, const std::string& defaultLanguage="de");
     ~ListingFetch_XmltvSe();
 
     std::list<ProgrammeData> fetch();

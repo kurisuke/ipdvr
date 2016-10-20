@@ -6,6 +6,7 @@ SET(SOURCES
     config.cpp
     fetchjob_curl.cpp
     listingfetch_xmltvse.cpp
+    listingupdater.cpp
     main.cpp
     programmedata.h
     )

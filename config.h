@@ -34,6 +34,7 @@ public:
     bool parse();
 
     ChannelData getChannelData(const std::string &name);
+    const ChannelData::StdList& getChannelData();
 
 private:
 
