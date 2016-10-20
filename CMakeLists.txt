@@ -7,6 +7,7 @@ SET(SOURCES
     fetchjob_curl.cpp
     listingfetch_xmltvse.cpp
     main.cpp
+    programmedata.h
     )
 
 ADD_EXECUTABLE(ipdvr ${SOURCES})

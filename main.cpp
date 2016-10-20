@@ -31,6 +31,5 @@ int main(void)
 
     std::string url = "http://json.xmltv.se/mdr.daserste.de_2016-03-01.js.gz";
     ListingFetch_XmltvSe listingFetch(config.getChannelData("ZDF"));
-    listingFetch.fetch();
-    //auto spJsonDoc = listingFetch.fetch(url);
+    auto programmes = listingFetch.fetch();
 }

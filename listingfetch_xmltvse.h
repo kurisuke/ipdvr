@@ -27,20 +27,25 @@
 #include <list>
 
 #include "channeldata.h"
+#include "programmedata.h"
 
 class ListingFetch_XmltvSe
 {
 public:
-    ListingFetch_XmltvSe(ChannelData channelData);
+    ListingFetch_XmltvSe(ChannelData channelData, const std::string& defaultLanguage="de");
     ~ListingFetch_XmltvSe();
 
-    void fetch();
+    std::list<ProgrammeData> fetch();
 
 private:
     std::list<std::string> generateUrls(unsigned int days);
     std::shared_ptr<rapidjson::Document> fetchUrl(std::string singleUrl);
+    std::list<ProgrammeData> parseListing(std::shared_ptr<rapidjson::Document> spJsonDoc);
+
+    std::string getLocalizedString(const rapidjson::Value& itemList, const std::string& language="");
 
     ChannelData m_channelData;
+    std::string m_defaultLanguage;
 };
 
 #endif // IPDVR_LISTINGFETCH_XMLTVSE_H

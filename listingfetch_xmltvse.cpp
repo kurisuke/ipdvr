@@ -29,8 +29,9 @@
 
 #include <sstream>
 
-ListingFetch_XmltvSe::ListingFetch_XmltvSe(ChannelData channelData)
-  : m_channelData(channelData)
+ListingFetch_XmltvSe::ListingFetch_XmltvSe(ChannelData channelData, const std::string &defaultLanguage)
+  : m_channelData(channelData),
+    m_defaultLanguage(defaultLanguage)
 {
     curl_global_init(CURL_GLOBAL_ALL);
 }
@@ -40,14 +41,25 @@ ListingFetch_XmltvSe::~ListingFetch_XmltvSe()
     curl_global_cleanup();
 }
 
-void ListingFetch_XmltvSe::fetch()
+std::list<ProgrammeData> ListingFetch_XmltvSe::fetch()
 {
+    std::list<ProgrammeData> pd;
+
     auto urls = generateUrls(7);
 
     for(auto& url : urls)
     {
-        fetchUrl(url);
+        if(pd.empty())
+        {
+            pd = parseListing(fetchUrl(url));
+        }
+        else
+        {
+            pd.splice(pd.end(), parseListing(fetchUrl(url)));
+        }
     }
+
+    return pd;
 }
 
 std::shared_ptr<rapidjson::Document> ListingFetch_XmltvSe::fetchUrl(std::string singleUrl)
@@ -105,4 +117,89 @@ std::list<std::string> ListingFetch_XmltvSe::generateUrls(unsigned int days)
     }
 
     return std::move(l);
+}
+
+std::list<ProgrammeData> ListingFetch_XmltvSe::parseListing(std::shared_ptr<rapidjson::Document> spJsonDoc)
+{
+    if ((spJsonDoc != nullptr) && (spJsonDoc->HasMember("jsontv")) && ((*spJsonDoc)["jsontv"].HasMember("programme")))
+    {
+        const auto& programmeRoot = (*spJsonDoc)["jsontv"]["programme"];
+
+        std::list<ProgrammeData> programmeList;
+
+        for (auto it = programmeRoot.Begin(); it != programmeRoot.End(); ++it)
+        {
+            if (it->IsObject())
+            {
+                if ((it->HasMember("title")) &&
+                    (it->HasMember("start")) && (*it)["start"].IsString() &&
+                    (it->HasMember("stop")) && (*it)["stop"].IsString())
+                {
+                    const std::string desc = it->HasMember("desc") ? getLocalizedString((*it)["desc"]) : "" ;
+
+                    int iStart, iStop;
+
+                    try {
+                      iStart = std::stoi((*it)["start"].GetString());
+                      iStop = std::stoi((*it)["stop"].GetString());
+                    }
+                    catch(std::invalid_argument& ){
+                      ERROR_PRINT("Found incomplete programme entry, skipping..." << std::endl);
+                      continue;
+                    }
+                    catch(std::out_of_range& ){
+                      ERROR_PRINT("Found incomplete programme entry, skipping..." << std::endl);
+                      continue;
+                    }
+
+                    programmeList.emplace_back(getLocalizedString((*it)["title"]),
+                                               desc,
+                                               iStart,
+                                               iStop);
+
+                    DEBUG_PRINT("Added entry:" << getLocalizedString((*it)["title"]) << std::endl);
+                }
+                else
+                {
+                    ERROR_PRINT("Found incomplete programme entry, skipping..." << std::endl);
+                }
+            }
+        }
+
+        return programmeList;
+    }
+    else
+    {
+        return std::list<ProgrammeData>();
+    }
+}
+
+std::string ListingFetch_XmltvSe::getLocalizedString(const rapidjson::Value& itemList, const std::string& language)
+{
+    if (!itemList.IsObject())
+    {
+        ERROR_PRINT("Not an object (for language-specific strings)" << std::endl);
+        return "";
+    }
+
+    if ((language != "") && (itemList.HasMember(language.c_str())) && itemList[language.c_str()].IsString())
+    {
+        return itemList[language.c_str()].GetString();
+    }
+    else if ((itemList.HasMember(m_defaultLanguage.c_str())) && itemList[m_defaultLanguage.c_str()].IsString())
+    {
+        return itemList[m_defaultLanguage.c_str()].GetString();
+    }
+    else
+    {
+        auto it = itemList.Begin();
+        if ((it != itemList.End()) && it->IsString())
+        {
+            return it->GetString();
+        }
+        else
+        {
+            return "";
+        }
+    }
 }
