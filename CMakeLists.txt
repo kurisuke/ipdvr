@@ -2,7 +2,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 PROJECT(ipdvr)
 
 SET(SOURCES
-    channeldata.cpp
+    channeldata.h
     config.cpp
     fetchjob_curl.cpp
     listingfetch_xmltvse.cpp

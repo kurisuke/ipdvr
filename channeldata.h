@@ -24,9 +24,8 @@
 #include <list>
 #include <string>
 
-class ChannelData
+struct ChannelData
 {
-public:
     enum class ListingType
     {
         Invalid = 0,
@@ -35,26 +34,23 @@ public:
 
     typedef std::list<ChannelData> StdList;
 
-    ChannelData(const std::string& name, const std::string& streamUrl,
-                const ListingType& listingType, const std::string& listingName);
+    std::string name;
+    std::string streamUrl;
+    ListingType listingType;
+    std::string listingName;
 
-    ChannelData();
+    ChannelData(const std::string& c_name, const std::string& c_streamUrl,
+                const ListingType& c_listingType, const std::string& c_listingName)
+        : name(c_name),
+          streamUrl(c_streamUrl),
+          listingType(c_listingType),
+          listingName(c_listingName) {}
 
-    const std::string& getName();
-    const std::string& getStreamUrl();
-    const ListingType& getListingType();
-    const std::string& getListingName();
-
-    void setName(const std::string& name);
-    void setStreamUrl(const std::string& streamUrl);
-    void setListingType(const ListingType& listingType);
-    void setListingName(const std::string& listingName);
-
-private:
-    std::string m_name;
-    std::string m_streamUrl;
-    ListingType m_listingType;
-    std::string m_listingName;
+    ChannelData()
+        : name(""),
+          streamUrl(""),
+          listingType(ListingType::Invalid),
+          listingName("") {}
 };
 
 #endif // CHANNELDATA_H

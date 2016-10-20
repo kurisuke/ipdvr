@@ -94,7 +94,7 @@ std::list<std::string> ListingFetch_XmltvSe::generateUrls(unsigned int days)
 
         std::stringstream s;
         s << "http://json.xmltv.se/"
-          << m_channelData.getListingName() << "_"
+          << m_channelData.listingName << "_"
           << utc_tm.tm_year + 1900 << "-"
           << utc_tm.tm_mon + 1 << "-"
           << utc_tm.tm_mday

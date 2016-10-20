@@ -137,7 +137,7 @@ bool Config::parse()
 ChannelData Config::getChannelData(const std::string& name)
 {
     auto it = std::find_if(m_channelDataList.cbegin(), m_channelDataList.cend(),
-                           [name](ChannelData c) {return c.getName() == name; });
+                           [name](ChannelData c) {return c.name == name; });
     if(it != m_channelDataList.cend())
     {
         return (*it);
