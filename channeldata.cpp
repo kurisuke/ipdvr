@@ -20,14 +20,22 @@
 
 #include "channeldata.h"
 
-ChannelData::ChannelData(const std::__cxx11::string &name,
-                         const std::__cxx11::string &streamUrl,
+ChannelData::ChannelData(const std::string &name,
+                         const std::string &streamUrl,
                          const ListingType &listingType,
-                         const std::__cxx11::string &listingName)
+                         const std::string &listingName)
     : m_name(name),
       m_streamUrl(streamUrl),
       m_listingType(listingType),
       m_listingName(listingName)
+{
+}
+
+ChannelData::ChannelData()
+    : m_name(""),
+      m_streamUrl(""),
+      m_listingType(ListingType::Invalid),
+      m_listingName("")
 {
 }
 

@@ -18,24 +18,39 @@
  *
  */
 
-#include "listingfetch.h"
+#include "listingfetch_xmltvse.h"
 
 #include "debug.h"
 #include "fetchjob_curl.h"
 
+#include <chrono>
 #include <curl/curl.h>
+#include <ctime>
 
-ListingFetch::ListingFetch()
+#include <sstream>
+
+ListingFetch_XmltvSe::ListingFetch_XmltvSe(ChannelData channelData)
+  : m_channelData(channelData)
 {
     curl_global_init(CURL_GLOBAL_ALL);
 }
 
-ListingFetch::~ListingFetch()
+ListingFetch_XmltvSe::~ListingFetch_XmltvSe()
 {
     curl_global_cleanup();
 }
 
-std::shared_ptr<rapidjson::Document> ListingFetch::fetch(std::string singleUrl)
+void ListingFetch_XmltvSe::fetch()
+{
+    auto urls = generateUrls(7);
+
+    for(auto& url : urls)
+    {
+        fetchUrl(url);
+    }
+}
+
+std::shared_ptr<rapidjson::Document> ListingFetch_XmltvSe::fetchUrl(std::string singleUrl)
 {
     std::unique_ptr<FetchJob_Curl> pFetcher(new FetchJob_Curl(singleUrl));
 
@@ -64,4 +79,30 @@ std::shared_ptr<rapidjson::Document> ListingFetch::fetch(std::string singleUrl)
         DEBUG_PRINT("JSON parse failed!" << std::endl);
         return nullptr;
     }
+}
+
+std::list<std::string> ListingFetch_XmltvSe::generateUrls(unsigned int days)
+{
+    auto now = std::chrono::system_clock::now();
+
+    std::list<std::string> l;
+
+    for(int i = 0; i <= days; i++)
+    {
+        time_t tt = std::chrono::system_clock::to_time_t(now + std::chrono::hours(24 * i));
+        tm utc_tm = *gmtime(&tt);
+
+        std::stringstream s;
+        s << "http://json.xmltv.se/"
+          << m_channelData.getListingName() << "_"
+          << utc_tm.tm_year + 1900 << "-"
+          << utc_tm.tm_mon + 1 << "-"
+          << utc_tm.tm_mday
+          << ".js.gz";
+
+        l.push_back(s.str());
+        DEBUG_PRINT(s.str() << std::endl);
+    }
+
+    return std::move(l);
 }

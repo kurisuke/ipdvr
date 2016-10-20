@@ -18,20 +18,29 @@
  *
  */
 
-#ifndef IPDVR_LISTINGFETCH_H
-#define IPDVR_LISTINGFETCH_H
+#ifndef IPDVR_LISTINGFETCH_XMLTVSE_H
+#define IPDVR_LISTINGFETCH_XMLTVSE_H
 
 #include <memory>
 #include "rapidjson/document.h"
 #include <string>
+#include <list>
 
-class ListingFetch
+#include "channeldata.h"
+
+class ListingFetch_XmltvSe
 {
 public:
-    ListingFetch();
-    ~ListingFetch();
+    ListingFetch_XmltvSe(ChannelData channelData);
+    ~ListingFetch_XmltvSe();
 
-    std::shared_ptr<rapidjson::Document> fetch(std::string singleUrl);
+    void fetch();
+
+private:
+    std::list<std::string> generateUrls(unsigned int days);
+    std::shared_ptr<rapidjson::Document> fetchUrl(std::string singleUrl);
+
+    ChannelData m_channelData;
 };
 
-#endif // IPDVR_LISTINGFETCH_H
+#endif // IPDVR_LISTINGFETCH_XMLTVSE_H

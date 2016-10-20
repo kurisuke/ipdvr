@@ -22,6 +22,7 @@
 
 #include "debug.h"
 
+#include <algorithm>
 #include <fstream>
 #include <map>
 #include "rapidjson/document.h"
@@ -130,5 +131,19 @@ bool Config::parse()
     {
         DEBUG_PRINT("Could not open file: " << m_path << std::endl);
         return false;
+    }
+}
+
+ChannelData Config::getChannelData(const std::string& name)
+{
+    auto it = std::find_if(m_channelDataList.cbegin(), m_channelDataList.cend(),
+                           [name](ChannelData c) {return c.getName() == name; });
+    if(it != m_channelDataList.cend())
+    {
+        return (*it);
+    }
+    else
+    {
+        return ChannelData(); // invalid default object
     }
 }

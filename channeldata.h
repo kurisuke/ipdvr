@@ -38,6 +38,8 @@ public:
     ChannelData(const std::string& name, const std::string& streamUrl,
                 const ListingType& listingType, const std::string& listingName);
 
+    ChannelData();
+
     const std::string& getName();
     const std::string& getStreamUrl();
     const ListingType& getListingType();

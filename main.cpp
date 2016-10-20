@@ -19,7 +19,7 @@
  */
 
 #include "config.h"
-#include "listingfetch.h"
+#include "listingfetch_xmltvse.h"
 
 #include <iostream>
 
@@ -30,6 +30,7 @@ int main(void)
     config.parse();
 
     std::string url = "http://json.xmltv.se/mdr.daserste.de_2016-03-01.js.gz";
-    ListingFetch listingFetch;
-    auto spJsonDoc = listingFetch.fetch(url);
+    ListingFetch_XmltvSe listingFetch(config.getChannelData("ZDF"));
+    listingFetch.fetch();
+    //auto spJsonDoc = listingFetch.fetch(url);
 }

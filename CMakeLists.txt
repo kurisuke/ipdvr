@@ -5,7 +5,7 @@ SET(SOURCES
     channeldata.cpp
     config.cpp
     fetchjob_curl.cpp
-    listingfetch.cpp
+    listingfetch_xmltvse.cpp
     main.cpp
     )
 

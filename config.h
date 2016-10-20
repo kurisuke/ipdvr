@@ -32,6 +32,9 @@ public:
     ~Config();
 
     bool parse();
+
+    ChannelData getChannelData(const std::string &name);
+
 private:
 
     std::string m_path;
