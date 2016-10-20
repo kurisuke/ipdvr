@@ -28,7 +28,7 @@
 #define ERROR_PRINT(x) do { std::cerr << "[" << __FILENAME__ << ":" << __LINE__ << "] " << x; } while (0)
 
 #ifdef DEBUG
-#   define DEBUG_PRINT(x) do { std::cerr << "[" << __FILENAME__ << ":" << __LINE__ << "] " << x; } while (0)
+#   define DEBUG_PRINT(x) do { std::cout << "[" << __FILENAME__ << ":" << __LINE__ << "] " << x; } while (0)
 #else
 #   define DEBUG_PRINT(x)
 #endif // DEBUG
