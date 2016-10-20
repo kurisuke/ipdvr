@@ -18,8 +18,8 @@
  *
  */
 
-#ifndef PROGRAMMEDATA_H
-#define PROGRAMMEDATA_H
+#ifndef IPDVR_PROGRAMMEDATA_H
+#define IPDVR_PROGRAMMEDATA_H
 
 #include <chrono>
 #include <list>
@@ -52,4 +52,4 @@ struct ProgrammeData
     {}
 };
 
-#endif // PROGRAMMEDATA_H
+#endif // IPDVR_PROGRAMMEDATA_H

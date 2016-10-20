@@ -18,8 +18,8 @@
  *
  */
 
-#ifndef CHANNELDATA_H
-#define CHANNELDATA_H
+#ifndef IPDVR_CHANNELDATA_H
+#define IPDVR_CHANNELDATA_H
 
 #include <list>
 #include <string>
@@ -53,4 +53,4 @@ struct ChannelData
           listingName("") {}
 };
 
-#endif // CHANNELDATA_H
+#endif // IPDVR_CHANNELDATA_H
