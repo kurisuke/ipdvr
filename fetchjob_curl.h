@@ -31,12 +31,14 @@ public:
     FetchJob_Curl(const std::string & sUrl);
     ~FetchJob_Curl();
 
-    bool run();
+    bool download();
+    int getFiletime();
     char* getData();
     size_t getSize();
 
 private:
     static size_t cbWrite(void *src, size_t size, size_t nmemb, void *dest);
+    static size_t cbDummy(void *src, size_t size, size_t nmemb, void *dest);
 
     struct FetchResult {
         char* pData;

@@ -14,7 +14,7 @@ Planned Features
 
 - Build system: CMake
 - Listings DB: sqlite
-- All things JSON: rapidjson
+- All things JSON: nlohmann/json
 
 Status
 ------
@@ -27,6 +27,6 @@ Attributions
 
 ipdvr includes the following 3rd-party libraries:
 
-- rapidjson/* -- JSON parser
-    - https://github.com/miloyip/rapidjson
-    - license: COPYING.rapidjson
+- json/json.hpp -- JSON parser
+    - https://github.com/nlohmann/json
+    - license: COPYING.json

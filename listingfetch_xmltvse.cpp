@@ -60,11 +60,14 @@ std::list<ProgrammeData> ListingFetch_XmltvSe::fetch()
     return pd;
 }
 
-std::shared_ptr<rapidjson::Document> ListingFetch_XmltvSe::fetchUrl(const std::string& singleUrl)
+std::shared_ptr<json> ListingFetch_XmltvSe::fetchUrl(const std::string& singleUrl)
 {
+    std::unique_ptr<FetchJob_Curl> pHeaderFetcher(new FetchJob_Curl(singleUrl));
     std::unique_ptr<FetchJob_Curl> pFetcher(new FetchJob_Curl(singleUrl));
 
-    bool res = pFetcher->run();
+    int filetime = pHeaderFetcher->getFiletime();
+
+    bool res = pFetcher->download();
 
     if (res == false)
     {
@@ -76,10 +79,9 @@ std::shared_ptr<rapidjson::Document> ListingFetch_XmltvSe::fetchUrl(const std::s
         DEBUG_PRINT("Read " << pFetcher->getSize() << " bytes from URL: " << singleUrl << std::endl);
     }
 
-    auto spJsonDoc = std::make_shared<rapidjson::Document>();
-    spJsonDoc->Parse(pFetcher->getData());
+    auto spJsonDoc = std::make_shared<json>(json::parse(pFetcher->getData()));
 
-    if (spJsonDoc->IsObject() && spJsonDoc->HasMember("jsontv"))
+    if (spJsonDoc->is_object() && (spJsonDoc->find("jsontv") != spJsonDoc->end()))
     {
         DEBUG_PRINT("Parsed a valid JSONTV document." << std::endl);
         return spJsonDoc;
@@ -117,29 +119,33 @@ std::list<std::string> ListingFetch_XmltvSe::generateUrls(unsigned int days)
     return std::move(l);
 }
 
-std::list<ProgrammeData> ListingFetch_XmltvSe::parseListing(std::shared_ptr<rapidjson::Document> spJsonDoc)
+std::list<ProgrammeData> ListingFetch_XmltvSe::parseListing(std::shared_ptr<json> spJsonDoc)
 {
-    if ((spJsonDoc != nullptr) && (spJsonDoc->HasMember("jsontv")) && ((*spJsonDoc)["jsontv"].HasMember("programme")))
+    if ((spJsonDoc != nullptr) &&
+        (spJsonDoc->find("jsontv") != spJsonDoc->end()) &&
+        ((*spJsonDoc)["jsontv"].find("programme") != (*spJsonDoc)["jsontv"].end()))
     {
         const auto& programmeRoot = (*spJsonDoc)["jsontv"]["programme"];
 
         std::list<ProgrammeData> programmeList;
 
-        for (auto it = programmeRoot.Begin(); it != programmeRoot.End(); ++it)
+        for (const auto& it : programmeRoot)
         {
-            if (it->IsObject())
+            if (it.is_object())
             {
-                if ((it->HasMember("title")) &&
-                    (it->HasMember("start")) && (*it)["start"].IsString() &&
-                    (it->HasMember("stop")) && (*it)["stop"].IsString())
+                if ((it.find("title") != it.end()) &&
+                    (it.find("start") != it.end()) && (it["start"].is_string()) &&
+                    (it.find("stop") != it.end()) && (it["stop"].is_string()))
                 {
-                    const std::string desc = it->HasMember("desc") ? getLocalizedString((*it)["desc"]) : "" ;
+                    const std::string desc = (it.find("desc") != it.end()) ? getLocalizedString(it["desc"]) : "" ;
 
                     int iStart, iStop;
+                    std::string sStart = it["start"];
+                    std::string sStop = it["stop"];
 
                     try {
-                      iStart = std::stoi((*it)["start"].GetString());
-                      iStop = std::stoi((*it)["stop"].GetString());
+                      iStart = std::stoi(sStart);
+                      iStop = std::stoi(sStop);
                     }
                     catch(std::invalid_argument& ){
                       ERROR_PRINT("Found incomplete programme entry, skipping..." << std::endl);
@@ -150,12 +156,12 @@ std::list<ProgrammeData> ListingFetch_XmltvSe::parseListing(std::shared_ptr<rapi
                       continue;
                     }
 
-                    programmeList.emplace_back(getLocalizedString((*it)["title"]),
+                    programmeList.emplace_back(getLocalizedString(it["title"]),
                                                desc,
                                                iStart,
                                                iStop);
 
-                    DEBUG_PRINT("Added entry:" << getLocalizedString((*it)["title"]) << std::endl);
+                    DEBUG_PRINT("Added entry:" << getLocalizedString(it["title"]) << std::endl);
                 }
                 else
                 {
@@ -172,28 +178,28 @@ std::list<ProgrammeData> ListingFetch_XmltvSe::parseListing(std::shared_ptr<rapi
     }
 }
 
-std::string ListingFetch_XmltvSe::getLocalizedString(const rapidjson::Value& itemList, const std::string& language)
+std::string ListingFetch_XmltvSe::getLocalizedString(const json &itemList, const std::string& language)
 {
-    if (!itemList.IsObject())
+    if (!itemList.is_object())
     {
         ERROR_PRINT("Not an object (for language-specific strings)" << std::endl);
         return "";
     }
 
-    if ((language != "") && (itemList.HasMember(language.c_str())) && itemList[language.c_str()].IsString())
+    if ((language != "") && (itemList.find(language) != itemList.end()) && itemList[language].is_string())
     {
-        return itemList[language.c_str()].GetString();
+        return itemList[language];
     }
-    else if ((itemList.HasMember(m_defaultLanguage.c_str())) && itemList[m_defaultLanguage.c_str()].IsString())
+    else if ((itemList.find(m_defaultLanguage) != itemList.end()) && itemList[m_defaultLanguage].is_string())
     {
-        return itemList[m_defaultLanguage.c_str()].GetString();
+        return itemList[m_defaultLanguage];
     }
     else
     {
-        auto it = itemList.Begin();
-        if ((it != itemList.End()) && it->IsString())
+        auto it = itemList.begin();
+        if ((it != itemList.end()) && it->is_string())
         {
-            return it->GetString();
+            return (*it);
         }
         else
         {

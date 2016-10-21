@@ -24,9 +24,12 @@
 
 #include <algorithm>
 #include <fstream>
+#include "json/json.hpp"
 #include <map>
-#include "rapidjson/document.h"
+//#include "rapidjson/document.h"
 #include <sstream>
+
+using json = nlohmann::json;
 
 Config::Config(std::string path) :
     m_path(path)
@@ -37,45 +40,39 @@ Config::~Config()
 {
 }
 
-ChannelData::StdList parseChannels(const rapidjson::Value& channelsroot)
+ChannelData::StdList parseChannels(const json& channelsroot)
 {
     ChannelData::StdList ret;
-
-    if (!channelsroot.IsArray())
-    {
-        ERROR_PRINT("Not a channels array, parsing failed.");
-        return ret;
-    }
 
     static const std::map<const std::string, ChannelData::ListingType> listingTypeMap =
     {
         {"json.xmltv.se", ChannelData::ListingType::JsonXmltvSe}
     };
 
-    for (rapidjson::Value::ConstValueIterator it = channelsroot.Begin(); it != channelsroot.End(); ++it)
+    for (const auto& channel : channelsroot)
     {
-        if(it->IsObject())
+        if(channel.is_object())
         {
-            if ((it->HasMember("name")) &&
-                (it->HasMember("streamUrl")) &&
-                (it->HasMember("listingType")) &&
-                (it->HasMember("listingName")))
+            auto name = channel.find("name");
+            auto streamUrl = channel.find("streamUrl");
+            auto listingTypeStr = channel.find("listingType");
+            auto listingName = channel.find("listingName");
+
+            if ((name != channel.end()) && (*name).is_string() &&
+                (streamUrl != channel.end()) && (*streamUrl).is_string() &&
+                (listingTypeStr != channel.end()) && (*listingTypeStr).is_string() &&
+                (listingName != channel.end()) && (*listingName).is_string())
             {
-                const std::string listingTypeStr = (*it)["listingType"].GetString();
-
-                if (listingTypeMap.count(listingTypeStr))
+                if (listingTypeMap.count(*listingTypeStr))
                 {
-                    const std::string name = (*it)["name"].GetString();
-                    const std::string streamUrl = (*it)["streamUrl"].GetString();
-                    const ChannelData::ListingType listingType = listingTypeMap.at(listingTypeStr);
-                    const std::string listingName = (*it)["listingName"].GetString();
+                    const ChannelData::ListingType listingType = listingTypeMap.at(*listingTypeStr);
 
-                    ret.push_back(ChannelData(name, streamUrl, listingType, listingName));
-                    DEBUG_PRINT("Added new channel entry: " << name << std::endl);
+                    ret.push_back(ChannelData(*name, *streamUrl, listingType, *listingName));
+                    DEBUG_PRINT("Added new channel entry: " << (*name) << std::endl);
                 }
                 else
                 {
-                    ERROR_PRINT("Found invalid listing type: " << listingTypeStr << " , skipping..." << std::endl);
+                    ERROR_PRINT("Found invalid listing type: " << (*listingTypeStr) << " , skipping..." << std::endl);
                 }
             }
             else
@@ -100,10 +97,9 @@ bool Config::parse()
         buffer << ifs.rdbuf();
 
         // convert to c char and parse
-        rapidjson::Document jsonDoc;
-        jsonDoc.Parse(buffer.str().c_str());
+        const auto jsonDoc = json::parse(buffer.str());
 
-        if (jsonDoc.IsObject() && jsonDoc.HasMember("ipdvrConfig"))
+        if (jsonDoc.is_object() && (jsonDoc.find("ipdvrConfig") != jsonDoc.end()))
         {
             DEBUG_PRINT("Found a valid ipdvrConfig root tag in file: " << m_path << std::endl);
         }
@@ -113,8 +109,8 @@ bool Config::parse()
             return false;
         }
 
-        const rapidjson::Value& rootNode = jsonDoc["ipdvrConfig"];
-        if (rootNode.HasMember("channels"))
+        const auto rootNode = jsonDoc["ipdvrConfig"];
+        if (rootNode.find("channels") != rootNode.end())
         {
             m_channelDataList = parseChannels(rootNode["channels"]);
             DEBUG_PRINT("Parsed a channel list with " << m_channelDataList.size() << " entries." << std::endl);

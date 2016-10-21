@@ -21,13 +21,15 @@
 #ifndef IPDVR_LISTINGFETCH_XMLTVSE_H
 #define IPDVR_LISTINGFETCH_XMLTVSE_H
 
+#include "json/json.hpp"
 #include <memory>
-#include "rapidjson/document.h"
 #include <string>
 #include <list>
 
 #include "channeldata.h"
 #include "programmedata.h"
+
+using json = nlohmann::json;
 
 class ListingFetch_XmltvSe
 {
@@ -39,10 +41,10 @@ public:
 
 private:
     std::list<std::string> generateUrls(unsigned int days);
-    std::shared_ptr<rapidjson::Document> fetchUrl(const std::string& singleUrl);
-    std::list<ProgrammeData> parseListing(std::shared_ptr<rapidjson::Document> spJsonDoc);
+    std::shared_ptr<json> fetchUrl(const std::string& singleUrl);
+    std::list<ProgrammeData> parseListing(std::shared_ptr<json> spJsonDoc);
 
-    std::string getLocalizedString(const rapidjson::Value& itemList, const std::string& language="");
+    std::string getLocalizedString(const json& itemList, const std::string& language="");
 
     ChannelData m_channelData;
     std::string m_defaultLanguage;
