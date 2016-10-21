@@ -1,0 +1,18 @@
+{
+    "ipdvrConfig": {
+	"channels": [
+	    {
+		"name": "Das Erste",
+		"streamUrl": "rtp://@239.35.10.1:10000",
+		"listingType": "json.xmltv.se",
+		"listingName": "daserste.de"
+	    },
+	    {
+		"name": "ZDF",
+		"streamUrl": "rtp://@239.35.10.2:10000",
+		"listingType": "json.xmltv.se",
+		"listingName": "zdf.de"
+	    }
+	]
+    }
+}

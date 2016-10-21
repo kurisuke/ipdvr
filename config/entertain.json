@@ -30,7 +30,181 @@
 		"streamUrl": "rtp://@239.35.20.21:10000",
 		"listingType": "json.xmltv.se",
 		"listingName": "prosieben.de"
-	    }
+            },
+	    {
+		"name": "VOX",
+		"streamUrl": "rtp://@239.35.20.11:10000",
+		"listingType": "json.xmltv.se",
+		"listingName": "vox.de"
+            },
+	    {
+		"name": "Kabel 1",
+		"streamUrl": "rtp://@239.35.20.38:10000",
+		"listingType": "json.xmltv.se",
+		"listingName": "kabel1.de"
+            },
+	    {
+		"name": "RTL II",
+		"streamUrl": "rtp://@239.35.20.22:10000",
+		"listingType": "json.xmltv.se",
+		"listingName": "rtl2.de"
+            },
+	    {
+		"name": "Super RTL",
+		"streamUrl": "rtp://@239.35.20.39:10000",
+		"listingType": "json.xmltv.se",
+		"listingName": "super.rtl.de"
+            },
+	    {
+		"name": "KiKA",
+		"streamUrl": "rtp://@239.35.10.11:10000",
+		"listingType": "json.xmltv.se",
+		"listingName": "kika.daserste.de"
+            },
+	    {
+		"name": "3sat",
+		"streamUrl": "rtp://@239.35.10.47:10000",
+		"listingType": "json.xmltv.se",
+		"listingName": "3sat.de"
+            },
+	    {
+		"name": "n-tv",
+		"streamUrl": "rtp://@239.35.20.47:10000",
+		"listingType": "json.xmltv.se",
+		"listingName": "n-tv.de"
+            },
+	    {
+		"name": "PHOENIX",
+		"streamUrl": "rtp://@239.35.10.48:10000",
+		"listingType": "json.xmltv.se",
+		"listingName": "phoenix.daserste.de"
+            },
+	    {
+		"name": "zdf_neo",
+		"streamUrl": "rtp://@239.35.10.55:10000",
+		"listingType": "json.xmltv.se",
+		"listingName": "neo.zdf.de"
+            },
+	    {
+		"name": "BR",
+		"streamUrl": "rtp://@239.35.10.49:10000",
+		"listingType": "json.xmltv.se",
+		"listingName": "bfs.daserste.de"
+            },
+	    {
+		"name": "hr",
+		"streamUrl": "rtp://@239.35.10.60:10000",
+		"listingType": "json.xmltv.se",
+		"listingName": "hr.daserste.de"
+            },
+	    {
+		"name": "MDR",
+		"streamUrl": "rtp://@239.35.10.61:10000",
+		"listingType": "json.xmltv.se",
+		"listingName": "mdr.daserste.de"
+            },
+	    {
+		"name": "NDR",
+		"streamUrl": "rtp://@239.35.10.50:10000",
+		"listingType": "json.xmltv.se",
+		"listingName": "ndr.daserste.de"
+            },
+	    {
+		"name": "rbb",
+		"streamUrl": "rtp://@239.35.10.62:10000",
+		"listingType": "json.xmltv.se",
+		"listingName": "rbb.daserste.de"
+            },
+	    {
+		"name": "SR",
+		"streamUrl": "rtp://@239.35.10.64:10000",
+		"listingType": "json.xmltv.se",
+		"listingName": "sr.swr.daserste.de"
+            },
+	    {
+		"name": "SWR BW",
+		"streamUrl": "rtp://@239.35.10.51:10000",
+		"listingType": "json.xmltv.se",
+		"listingName": "bw.swr.daserste.de"
+            },
+	    {
+		"name": "SWR RP",
+		"streamUrl": "rtp://@239.35.10.52:10000",
+		"listingType": "json.xmltv.se",
+		"listingName": "rp.swr.daserste.de"
+            },
+	    {
+		"name": "WDR",
+		"streamUrl": "rtp://@239.35.10.53:10000",
+		"listingType": "json.xmltv.se",
+		"listingName": "wdr.daserste.de"
+            },
+	    {
+		"name": "ARTE",
+		"streamUrl": "rtp://@239.35.10.3:10000",
+		"listingType": "json.xmltv.se",
+		"listingName": "arte.de"
+            },
+	    {
+		"name": "ONE",
+		"streamUrl": "rtp://@239.35.10.58:10000",
+		"listingType": "json.xmltv.se",
+		"listingName": "einsfestival.daserste.de"
+            },
+	    {
+		"name": "sixx",
+		"streamUrl": "rtp://@239.35.20.9:10000",
+		"listingType": "json.xmltv.se",
+		"listingName": "sixx.de"
+            },
+	    {
+		"name": "RTLNITRO",
+		"streamUrl": "rtp://@239.35.20.59:10000",
+		"listingType": "json.xmltv.se",
+		"listingName": "nitro.rtl.de"
+            },
+	    {
+		"name": "Sat.1 Gold",
+		"streamUrl": "rtp://@239.35.20.24:10000",
+		"listingType": "json.xmltv.se",
+		"listingName": "gold.sat1.de"
+            },
+	    {
+		"name": "ProSieben MAXX",
+		"streamUrl": "rtp://@239.35.20.33:10000",
+		"listingType": "json.xmltv.se",
+		"listingName": "maxx.prosieben.de"
+            },
+	    {
+		"name": "ARD-alpha",
+		"streamUrl": "rtp://@239.35.10.24:10000",
+		"listingType": "json.xmltv.se",
+		"listingName": "br-alpha.daserste.de"
+            },
+	    {
+		"name": "DW",
+		"streamUrl": "rtp://@239.35.20.44:10000",
+		"listingType": "json.xmltv.se",
+		"listingName": "dw.de"
+            },
+	    {
+		"name": "Tagesschau24",
+		"streamUrl": "rtp://@239.35.10.63:10000",
+		"listingType": "json.xmltv.se",
+		"listingName": "einsextra.daserste.de"
+            },
+	    {
+		"name": "kabel eins Doku",
+		"streamUrl": "rtp://@239.35.20.67:10000",
+		"listingType": "json.xmltv.se",
+		"listingName": "doku.kabel1.de"
+            },
+	    {
+		"name": "ZDFinfo",
+		"streamUrl": "rtp://@239.35.10.56:10000",
+		"listingType": "json.xmltv.se",
+		"listingName": "infokanal.zdf.de"
+            }
 	]
     }
 }

@@ -30,7 +30,7 @@ int main(void)
 {
     curl_global_init(CURL_GLOBAL_ALL);
 
-    std::string configPath = "../config/entertain.json";
+    std::string configPath = "../config/entertain-min.json";
     auto spConfig = std::make_shared<Config>(configPath);
     spConfig->parse();
 
