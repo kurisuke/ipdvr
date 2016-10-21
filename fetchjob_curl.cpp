@@ -23,7 +23,7 @@
 #include <cstdlib>
 #include <cstring>
 
-FetchJob_Curl::FetchJob_Curl(std::string & sUrl)
+FetchJob_Curl::FetchJob_Curl(const std::string & sUrl)
     : m_fetchResult(),
       m_hCurl(0)
 {

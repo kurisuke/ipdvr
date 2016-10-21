@@ -28,7 +28,7 @@
 class FetchJob_Curl
 {
 public:
-    FetchJob_Curl(std::string & sUrl);
+    FetchJob_Curl(const std::string & sUrl);
     ~FetchJob_Curl();
 
     bool run();

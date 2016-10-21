@@ -25,7 +25,7 @@
 
 #include <chrono>
 #include <ctime>
-
+#include <future>
 #include <sstream>
 
 ListingFetch_XmltvSe::ListingFetch_XmltvSe(const ChannelData& channelData, const std::string &defaultLanguage)
@@ -44,22 +44,23 @@ std::list<ProgrammeData> ListingFetch_XmltvSe::fetch()
 
     auto urls = generateUrls(7);
 
+    std::list<std::future<std::list<ProgrammeData>>> fList;
+
     for(auto& url : urls)
     {
-        if(pd.empty())
-        {
-            pd = parseListing(fetchUrl(url));
-        }
-        else
-        {
-            pd.splice(pd.end(), parseListing(fetchUrl(url)));
-        }
+        fList.push_back(std::async(std::launch::async,
+                                   [url, this] { return parseListing(fetchUrl(url)); } ));
+    }
+
+    for(auto& fut : fList)
+    {
+        pd.splice(pd.end(), fut.get());
     }
 
     return pd;
 }
 
-std::shared_ptr<rapidjson::Document> ListingFetch_XmltvSe::fetchUrl(std::string singleUrl)
+std::shared_ptr<rapidjson::Document> ListingFetch_XmltvSe::fetchUrl(const std::string& singleUrl)
 {
     std::unique_ptr<FetchJob_Curl> pFetcher(new FetchJob_Curl(singleUrl));
 

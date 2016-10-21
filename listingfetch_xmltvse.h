@@ -39,7 +39,7 @@ public:
 
 private:
     std::list<std::string> generateUrls(unsigned int days);
-    std::shared_ptr<rapidjson::Document> fetchUrl(std::string singleUrl);
+    std::shared_ptr<rapidjson::Document> fetchUrl(const std::string& singleUrl);
     std::list<ProgrammeData> parseListing(std::shared_ptr<rapidjson::Document> spJsonDoc);
 
     std::string getLocalizedString(const rapidjson::Value& itemList, const std::string& language="");

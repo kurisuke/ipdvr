@@ -13,10 +13,17 @@ SET(SOURCES
 
 ADD_EXECUTABLE(ipdvr ${SOURCES})
 TARGET_COMPILE_FEATURES(ipdvr PRIVATE cxx_auto_type)
+TARGET_COMPILE_FEATURES(ipdvr PRIVATE cxx_lambdas)
+
 
 IF(CMAKE_BUILD_TYPE MATCHES Debug)
     TARGET_COMPILE_DEFINITIONS(ipdvr PRIVATE -DDEBUG)
 ENDIF()
+
+# Multi-Threading
+
+find_package(Threads)
+target_link_libraries(ipdvr ${CMAKE_THREAD_LIBS_INIT})
 
 # CURL
 
