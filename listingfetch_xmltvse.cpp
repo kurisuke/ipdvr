@@ -24,7 +24,6 @@
 #include "fetchjob_curl.h"
 
 #include <chrono>
-#include <curl/curl.h>
 #include <ctime>
 
 #include <sstream>
@@ -33,12 +32,10 @@ ListingFetch_XmltvSe::ListingFetch_XmltvSe(const ChannelData& channelData, const
   : m_channelData(channelData),
     m_defaultLanguage(defaultLanguage)
 {
-    curl_global_init(CURL_GLOBAL_ALL);
 }
 
 ListingFetch_XmltvSe::~ListingFetch_XmltvSe()
 {
-    curl_global_cleanup();
 }
 
 std::list<ProgrammeData> ListingFetch_XmltvSe::fetch()

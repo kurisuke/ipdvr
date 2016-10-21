@@ -24,8 +24,12 @@
 #include <iostream>
 #include <memory>
 
+#include <curl/curl.h>
+
 int main(void)
 {
+    curl_global_init(CURL_GLOBAL_ALL);
+
     std::string configPath = "../config/entertain.json";
     auto spConfig = std::make_shared<Config>(configPath);
     spConfig->parse();
@@ -33,4 +37,5 @@ int main(void)
     auto spListingUpdater = std::make_shared<ListingUpdater>(spConfig);
     spListingUpdater->updateAll();
 
+    curl_global_cleanup();
 }
