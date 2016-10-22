@@ -18,37 +18,35 @@
  *
  */
 
-#ifndef IPDVR_LISTINGFETCH_XMLTVSE_H
-#define IPDVR_LISTINGFETCH_XMLTVSE_H
+#ifndef IPDVR_LISTINGDB_H
+#define IPDVR_LISTINGDB_H
 
-#include <string>
-#include <list>
+#include <memory>
 
 #include "ilistingfetch.h"
-
-#include "channeldata.h"
-#include "listingdb.h"
-#include "listingparse_jsontv.h"
+#include "programmedata.h"
 
 namespace ipdvr {
 
-class ListingFetch_XmltvSe : public IListingFetch
+class ListingDb
 {
 public:
-    ListingFetch_XmltvSe(const ChannelData& channelData, const ListingParse_Jsontv& jsontvParser, std::shared_ptr<ListingDb> spListingDb);
-    ~ListingFetch_XmltvSe();
+    ListingDb();
+    ~ListingDb();
 
-    virtual ListingFetchResult fetch() const override;
+    ListingDb(ListingDb&& op);
+    ListingDb& operator=(ListingDb&& op);
+
+    bool insertProgramme(const ProgrammeData& programme);
+    bool insertDownloaded(const DownloadedFile& downloaded);
+
+    int getDownloadedTime(const std::string& url);
 
 private:
-    std::list<std::string> generateUrls(unsigned int days) const;
-    ListingFetchResult fetchUrl(const std::string& singleUrl) const;
-
-    ChannelData m_channelData;
-    std::shared_ptr<ListingDb> m_spListingDb;
-    const ListingParse_Jsontv& m_jsontvParser;
+    class Impl;
+    std::unique_ptr<Impl> m_upImpl;
 };
 
 } // namespace ipdvr
 
-#endif // IPDVR_LISTINGFETCH_XMLTVSE_H
+#endif // IPDVR_LISTINGDB_H

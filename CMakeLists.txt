@@ -6,6 +6,7 @@ SET(SOURCES
     config.cpp
     fetchjob_curl.cpp
     ilistingfetch.h
+    listingdb.cpp
     listingfetch_xmltvse.cpp
     listingparse_jsontv.cpp
     listingupdater.cpp
@@ -35,4 +36,14 @@ IF(CURL_FOUND)
     TARGET_LINK_LIBRARIES(ipdvr ${CURL_LIBRARIES})
 ELSE()
     MESSAGE(FATAL_ERROR "Could not find libcurl.")
+ENDIF()
+
+# SQLite3
+FIND_PATH(SQLITE3_INCLUDE_DIR NAMES sqlite3.h)
+FIND_LIBRARY(SQLITE3_LIBRARY NAMES sqlite3)
+IF(SQLITE3_INCLUDE_DIR AND SQLITE3_LIBRARY)
+    INCLUDE_DIRECTORIES(${SQLITE3_INCLUDE_DIR})
+    TARGET_LINK_LIBRARIES(ipdvr ${SQLITE3_LIBRARY})
+ELSE()
+    MESSAGE(FATAL_ERROR "Could not find libsqlite3.")
 ENDIF()

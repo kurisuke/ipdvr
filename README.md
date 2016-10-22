@@ -12,9 +12,12 @@ Planned Features
 * scheduling of single and series recordings
 * library management of recordings
 
-- Build system: CMake
-- Listings DB: sqlite
-- All things JSON: nlohmann/json
+Build requirements
+------------------
+
+* C++11 supporting compiler (tested with GCC, Clang)
+* libcurl
+* SQLite3
 
 Status
 ------

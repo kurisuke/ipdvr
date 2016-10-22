@@ -33,7 +33,7 @@ ListingParse_Jsontv::~ListingParse_Jsontv()
 {
 }
 
-std::list<ProgrammeData> ListingParse_Jsontv::parseListing(const std::string& data) const
+std::list<ProgrammeData> ListingParse_Jsontv::parseListing(const std::string& channelName, const std::string& data) const
 {
     const auto jsonDoc = json::parse(data);
 
@@ -59,7 +59,7 @@ std::list<ProgrammeData> ListingParse_Jsontv::parseListing(const std::string& da
             const auto start = std::stoi(p.at("start").get<std::string>());
             const auto stop = std::stoi(p.at("stop").get<std::string>());
 
-            programmeList.emplace_back(title, desc, start, stop);
+            programmeList.emplace_back(title, desc, channelName, start, stop);
             DEBUG_PRINT("Added entry:" << title << std::endl);
         }
         catch (std::invalid_argument& )

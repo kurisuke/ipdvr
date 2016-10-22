@@ -24,18 +24,20 @@
 #include <memory>
 
 #include "config.h"
+#include "listingdb.h"
 
 namespace ipdvr {
 
 class ListingUpdater
 {
 public:
-    ListingUpdater(std::shared_ptr<Config> spConfig);
+    ListingUpdater(std::shared_ptr<Config> spConfig, std::shared_ptr<ListingDb> spListingDb);
 
     void updateAll();
 
 private:
     std::shared_ptr<Config> m_spConfig;
+    std::shared_ptr<ListingDb> m_spListingDb;
 };
 
 } // namespace ipdvr

@@ -30,7 +30,7 @@ namespace ipdvr {
 struct DownloadedFile
 {
     std::string name;
-    int date;
+    int time;
 };
 
 struct ListingFetchResult

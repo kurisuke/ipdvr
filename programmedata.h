@@ -32,6 +32,7 @@ struct ProgrammeData
     typedef std::list<ProgrammeData> StdList;
 
     bool valid;
+    std::string channel;
     std::string title;
     std::string desc;
     std::chrono::time_point<std::chrono::system_clock> start;
@@ -39,11 +40,13 @@ struct ProgrammeData
 
     ProgrammeData(const std::string& c_title,
                   const std::string& c_desc,
+                  const std::string& c_channel,
                   int c_start,
                   int c_stop) :
         valid(true),
         title(c_title),
         desc(c_desc),
+        channel(c_channel),
         start(std::chrono::time_point<std::chrono::system_clock>(std::chrono::seconds(c_start))),
         stop(std::chrono::time_point<std::chrono::system_clock>(std::chrono::seconds(c_stop)))
     {}
@@ -52,6 +55,17 @@ struct ProgrammeData
     ProgrammeData() :
         valid(false)
     {}
+
+
+    inline int startSeconds() const
+    {
+        return std::chrono::duration_cast<std::chrono::seconds>(start.time_since_epoch()).count();
+    }
+
+    inline int stopSeconds() const
+    {
+        return std::chrono::duration_cast<std::chrono::seconds>(stop.time_since_epoch()).count();
+    }
 };
 
 } // namespace ipdvr

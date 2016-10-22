@@ -25,8 +25,9 @@
 
 namespace ipdvr {
 
-ListingUpdater::ListingUpdater(std::shared_ptr<Config> spConfig)
-    : m_spConfig(spConfig)
+ListingUpdater::ListingUpdater(std::shared_ptr<Config> spConfig, std::shared_ptr<ListingDb> spListingDb)
+    : m_spConfig(spConfig),
+      m_spListingDb(spListingDb)
 {
 
 }
@@ -39,9 +40,22 @@ void ListingUpdater::updateAll()
 
     for (const auto& channelData : channelDataList)
     {
-        ListingFetch_XmltvSe fetcher(channelData, parseJsontv);
+        ListingFetch_XmltvSe fetcher(channelData, parseJsontv, m_spListingDb);
         INFO_PRINT("Updating programme listings for channel: " << channelData.name << std::endl);
         auto res = fetcher.fetch();
+
+        for (const auto& programme : res.programmes)
+        {
+            m_spListingDb->insertProgramme(programme);
+        }
+        for (const auto& downloaded : res.downloadedFiles)
+        {
+            m_spListingDb->insertDownloaded(downloaded);
+        }
+
+        INFO_PRINT("Channel: " << channelData.name <<
+                   " -- Downloaded " << res.downloadedFiles.size() << " files with "
+                   << res.programmes.size() << " programmes" << std::endl);
     }
 }
 

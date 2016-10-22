@@ -38,7 +38,7 @@ public:
     ListingParse_Jsontv(const std::string& defaultLanguage="de");
     ~ListingParse_Jsontv();
 
-    std::list<ProgrammeData> parseListing(const std::string& data) const;
+    std::list<ProgrammeData> parseListing(const std::string& channelName, const std::string& data) const;
 
 private:  
     std::string getLocalizedString(const json& itemList, const std::string& language="") const;

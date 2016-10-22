@@ -19,6 +19,7 @@
  */
 
 #include "config.h"
+#include "listingdb.h"
 #include "listingupdater.h"
 
 #include <memory>
@@ -68,7 +69,9 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    auto spListingUpdater = std::make_shared<ipdvr::ListingUpdater>(spConfig);
+    auto spListingDb = std::make_shared<ipdvr::ListingDb>();
+
+    auto spListingUpdater = std::make_shared<ipdvr::ListingUpdater>(spConfig, spListingDb);
     spListingUpdater->updateAll();
 
     curl_global_cleanup();

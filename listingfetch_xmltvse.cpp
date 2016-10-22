@@ -30,9 +30,10 @@
 
 namespace ipdvr {
 
-ListingFetch_XmltvSe::ListingFetch_XmltvSe(const ChannelData& channelData, const ListingParse_Jsontv& jsontvParser)
+ListingFetch_XmltvSe::ListingFetch_XmltvSe(const ChannelData& channelData, const ListingParse_Jsontv& jsontvParser, std::shared_ptr<ListingDb> spListingDb)
   : m_channelData(channelData),
-    m_jsontvParser(jsontvParser)
+    m_jsontvParser(jsontvParser),
+    m_spListingDb(spListingDb)
 {
 }
 
@@ -72,6 +73,12 @@ ListingFetchResult ListingFetch_XmltvSe::fetchUrl(const std::string& singleUrl) 
 
     int filetime = headerFetcher.getFiletime();
 
+    if(filetime == m_spListingDb->getDownloadedTime(singleUrl))
+    {
+        DEBUG_PRINT("Already downloaded: " << singleUrl << std::endl);
+        return {std::list<ProgrammeData>(), std::list<DownloadedFile>()};
+    }
+
     bool res = fetcher.download();
 
     if (res == false)
@@ -86,7 +93,7 @@ ListingFetchResult ListingFetch_XmltvSe::fetchUrl(const std::string& singleUrl) 
 
     std::list<DownloadedFile> l { {singleUrl, filetime} };
 
-    return { m_jsontvParser.parseListing(fetcher.getData()), l};
+    return { m_jsontvParser.parseListing(m_channelData.name, fetcher.getData()), l};
 }
 
 std::list<std::string> ListingFetch_XmltvSe::generateUrls(unsigned int days) const
