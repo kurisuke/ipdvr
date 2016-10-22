@@ -18,27 +18,29 @@
  *
  */
 
-#include "listingupdater.h"
+#ifndef IPDVR_ILISTINGFETCH_H
+#define IPDVR_ILISTINGFETCH_H
 
-#include "debug.h"
-#include "listingfetch_xmltvse.h"
+#include <list>
 
-ListingUpdater::ListingUpdater(std::shared_ptr<Config> spConfig)
-    : m_spConfig(spConfig)
+#include "programmedata.h"
+
+struct DownloadedFile
 {
+    std::string name;
+    int date;
+};
 
-}
-
-void ListingUpdater::updateAll()
+struct ListingFetchResult
 {
-    const auto& channelDataList = m_spConfig->getChannelData();
+    std::list<ProgrammeData> programmes;
+    std::list<DownloadedFile> downloadedFiles;
+};
 
-    const ListingParse_Jsontv parseJsontv;
+class IListingFetch
+{
+public:
+    virtual ListingFetchResult fetch() const = 0;
+};
 
-    for (const auto& channelData : channelDataList)
-    {
-        ListingFetch_XmltvSe fetcher(channelData, parseJsontv);
-        INFO_PRINT("Updating programme listings for channel: " << channelData.name << std::endl);
-        auto res = fetcher.fetch();
-    }
-}
+#endif // IPDVR_ILISTINGFETCH_H

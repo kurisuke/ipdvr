@@ -25,28 +25,28 @@
 #include <string>
 #include <list>
 
+#include "ilistingfetch.h"
+
 #include "channeldata.h"
+#include "listingparse_jsontv.h"
 #include "programmedata.h"
 
 using json = nlohmann::json;
 
-class ListingFetch_XmltvSe
+class ListingFetch_XmltvSe : public IListingFetch
 {
 public:
-    ListingFetch_XmltvSe(const ChannelData& channelData, const std::string& defaultLanguage="de");
+    ListingFetch_XmltvSe(const ChannelData& channelData, const ListingParse_Jsontv& jsontvParser);
     ~ListingFetch_XmltvSe();
 
-    std::list<ProgrammeData> fetch() const;
+    virtual ListingFetchResult fetch() const override;
 
 private:
     std::list<std::string> generateUrls(unsigned int days) const;
-    json fetchUrl(const std::string& singleUrl) const;
-    std::list<ProgrammeData> parseListing(const json& jsonDoc) const;
-
-    std::string getLocalizedString(const json& itemList, const std::string& language="") const;
+    ListingFetchResult fetchUrl(const std::string& singleUrl) const;
 
     ChannelData m_channelData;
-    std::string m_defaultLanguage;
+    const ListingParse_Jsontv& m_jsontvParser;
 };
 
 #endif // IPDVR_LISTINGFETCH_XMLTVSE_H

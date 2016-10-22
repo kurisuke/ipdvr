@@ -18,27 +18,30 @@
  *
  */
 
-#include "listingupdater.h"
+#ifndef IPDVR_LISTINGPARSE_JSONTV_H
+#define IPDVR_LISTINGPARSE_JSONTV_H
 
-#include "debug.h"
-#include "listingfetch_xmltvse.h"
+#include "contrib/json/json.hpp"
+#include <string>
+#include <list>
 
-ListingUpdater::ListingUpdater(std::shared_ptr<Config> spConfig)
-    : m_spConfig(spConfig)
+#include "channeldata.h"
+#include "programmedata.h"
+
+using json = nlohmann::json;
+
+class ListingParse_Jsontv
 {
+public:
+    ListingParse_Jsontv(const std::string& defaultLanguage="de");
+    ~ListingParse_Jsontv();
 
-}
+    std::list<ProgrammeData> parseListing(const std::string& data) const;
 
-void ListingUpdater::updateAll()
-{
-    const auto& channelDataList = m_spConfig->getChannelData();
+private:  
+    std::string getLocalizedString(const json& itemList, const std::string& language="") const;
 
-    const ListingParse_Jsontv parseJsontv;
+    std::string m_defaultLanguage;
+};
 
-    for (const auto& channelData : channelDataList)
-    {
-        ListingFetch_XmltvSe fetcher(channelData, parseJsontv);
-        INFO_PRINT("Updating programme listings for channel: " << channelData.name << std::endl);
-        auto res = fetcher.fetch();
-    }
-}
+#endif // IPDVR_LISTINGPARSE_JSONTV_H

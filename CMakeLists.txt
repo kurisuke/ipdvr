@@ -5,7 +5,9 @@ SET(SOURCES
     channeldata.h
     config.cpp
     fetchjob_curl.cpp
+    ilistingfetch.h
     listingfetch_xmltvse.cpp
+    listingparse_jsontv.cpp
     listingupdater.cpp
     main.cpp
     programmedata.h
