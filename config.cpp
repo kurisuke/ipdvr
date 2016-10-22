@@ -23,12 +23,18 @@
 #include "debug.h"
 
 #include <algorithm>
+#include <cstdlib>
 #include <fstream>
 #include "contrib/json/json.hpp"
 #include <map>
 #include <sstream>
 
 using json = nlohmann::json;
+
+Config::Config()
+{
+    m_path = std::string(getenv("HOME")) + "/.config/ipdvr/config.json";
+}
 
 Config::Config(std::string path) :
     m_path(path)
@@ -113,7 +119,7 @@ bool Config::parse()
     }
     else
     {
-        DEBUG_PRINT("Could not open file: " << m_path << std::endl);
+        ERROR_PRINT("Could not open configuration file: " << m_path << std::endl);
         return false;
     }
 }

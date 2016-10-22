@@ -30,3 +30,6 @@ ipdvr includes the following 3rd-party code:
 - contrib/json/json.hpp -- JSON parser
     - https://github.com/nlohmann/json
     - license: COPYING.json
+- contrib/cxxopts/cxxopts.hpp -- JSON parser
+    - https://github.com/jarro2783/cxxopts
+    - license: COPYING.cxxopts

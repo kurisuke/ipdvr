@@ -21,21 +21,57 @@
 #include "config.h"
 #include "listingupdater.h"
 
-#include <iostream>
 #include <memory>
 
+#include "contrib/cxxopts/cxxopts.hpp"
 #include <curl/curl.h>
 
-int main(void)
+int main(int argc, char* argv[])
 {
     curl_global_init(CURL_GLOBAL_ALL);
 
-    std::string configPath = "../config/entertain-min.json";
-    auto spConfig = std::make_shared<Config>(configPath);
-    spConfig->parse();
+    // setup options parser
+    cxxopts::Options options("ipdvr", "ipdvr -- A digital video recorder for IPTV streams");
+    options.add_options()
+      ("c,config", "Configuration file", cxxopts::value<std::string>())
+      ("h,help", "Print this help")
+      ;
+    try
+    {
+        options.parse(argc, argv);
+    }
+    catch (cxxopts::OptionParseException & e)
+    {
+        std::cout << "Error parsing command-line options: " << e.what() << std::endl;
+        return 1;
+    }
+
+    // on --help / -h, print help and exit
+    if (options.count("help"))
+    {
+        std::cout << options.help();
+        return 0;
+    }
+
+    // try to parse config, exit if fail
+    std::shared_ptr<Config> spConfig;
+    if (options.count("config"))
+    {
+        spConfig = std::make_shared<Config>(options["config"].as<std::string>());
+    }
+    else
+    {
+        spConfig = std::make_shared<Config>();
+    }
+    if (spConfig->parse() == false)
+    {
+        return 1;
+    }
 
     auto spListingUpdater = std::make_shared<ListingUpdater>(spConfig);
     spListingUpdater->updateAll();
 
     curl_global_cleanup();
+
+    return 0;
 }

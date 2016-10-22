@@ -28,6 +28,7 @@
 class Config
 {
 public:
+    Config();
     Config(std::string path);
     ~Config();
 
@@ -37,7 +38,6 @@ public:
     const ChannelData::StdList& getChannelData();
 
 private:
-
     std::string m_path;
 
     ChannelData::StdList m_channelDataList;
