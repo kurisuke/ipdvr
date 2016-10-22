@@ -36,6 +36,7 @@ void ListingUpdater::updateAll()
     for (const auto& channelData : channelDataList)
     {
         ListingFetch_XmltvSe fetcher(channelData);
+        INFO_PRINT("Updating programme listings for channel: " << channelData.name << std::endl);
         auto programmes = fetcher.fetch();
     }
 }

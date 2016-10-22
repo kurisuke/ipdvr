@@ -26,6 +26,7 @@
 
 #define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
 #define ERROR_PRINT(x) do { std::cerr << "[" << __FILENAME__ << ":" << __LINE__ << "] " << x; } while (0)
+#define INFO_PRINT(x) do { std::cout << "[" << __FILENAME__ << "] " << x; } while (0)
 
 #ifdef DEBUG
 #   define DEBUG_PRINT(x) do { std::cout << "[" << __FILENAME__ << ":" << __LINE__ << "] " << x; } while (0)
