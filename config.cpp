@@ -26,7 +26,6 @@
 #include <fstream>
 #include "json/json.hpp"
 #include <map>
-//#include "rapidjson/document.h"
 #include <sstream>
 
 using json = nlohmann::json;
@@ -53,31 +52,26 @@ ChannelData::StdList parseChannels(const json& channelsroot)
     {
         if(channel.is_object())
         {
-            auto name = channel.find("name");
-            auto streamUrl = channel.find("streamUrl");
-            auto listingTypeStr = channel.find("listingType");
-            auto listingName = channel.find("listingName");
-
-            if ((name != channel.end()) && (*name).is_string() &&
-                (streamUrl != channel.end()) && (*streamUrl).is_string() &&
-                (listingTypeStr != channel.end()) && (*listingTypeStr).is_string() &&
-                (listingName != channel.end()) && (*listingName).is_string())
+            try
             {
-                if (listingTypeMap.count(*listingTypeStr))
-                {
-                    const ChannelData::ListingType listingType = listingTypeMap.at(*listingTypeStr);
+                const auto name = channel.at("name").get<std::string>();
+                const auto streamUrl = channel.at("streamUrl").get<std::string>();
+                const auto listingTypeStr = channel.at("listingType").get<std::string>();
+                const auto listingName = channel.at("listingName").get<std::string>();
 
-                    ret.push_back(ChannelData(*name, *streamUrl, listingType, *listingName));
-                    DEBUG_PRINT("Added new channel entry: " << (*name) << std::endl);
-                }
-                else
-                {
-                    ERROR_PRINT("Found invalid listing type: " << (*listingTypeStr) << " , skipping..." << std::endl);
-                }
+                const auto listingType = listingTypeMap.at(listingTypeStr);
+
+                ret.push_back(ChannelData(name, streamUrl, listingType, listingName));
+                DEBUG_PRINT("Added new channel entry: " << name << std::endl);
+
             }
-            else
+            catch(std::out_of_range&)
             {
-                ERROR_PRINT("Found incomplete channel entry, skipping..." << std::endl);
+                ERROR_PRINT("Found invalid channel entry, skipping..." << std::endl);
+            }
+            catch(std::domain_error&)
+            {
+                ERROR_PRINT("Found invalid channel entry, skipping..." << std::endl);
             }
         }
     }
@@ -92,12 +86,7 @@ bool Config::parse()
     // File exists?
     if (ifs.good())
     {
-        // Read file into stringstream
-        std::stringstream buffer;
-        buffer << ifs.rdbuf();
-
-        // convert to c char and parse
-        const auto jsonDoc = json::parse(buffer.str());
+        const auto jsonDoc = json::parse(ifs);
 
         if (jsonDoc.is_object() && (jsonDoc.find("ipdvrConfig") != jsonDoc.end()))
         {
@@ -121,7 +110,6 @@ bool Config::parse()
             ERROR_PRINT("No channels defined!" << std::endl);
             return false;
         }
-
     }
     else
     {

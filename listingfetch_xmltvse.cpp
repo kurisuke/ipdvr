@@ -38,13 +38,12 @@ ListingFetch_XmltvSe::~ListingFetch_XmltvSe()
 {
 }
 
-std::list<ProgrammeData> ListingFetch_XmltvSe::fetch()
+std::list<ProgrammeData> ListingFetch_XmltvSe::fetch() const
 {
     std::list<ProgrammeData> pd;
-
-    auto urls = generateUrls(7);
-
     std::list<std::future<std::list<ProgrammeData>>> fList;
+
+    const auto urls = generateUrls(7);
 
     for(auto& url : urls)
     {
@@ -60,14 +59,14 @@ std::list<ProgrammeData> ListingFetch_XmltvSe::fetch()
     return pd;
 }
 
-std::shared_ptr<json> ListingFetch_XmltvSe::fetchUrl(const std::string& singleUrl)
+json ListingFetch_XmltvSe::fetchUrl(const std::string& singleUrl) const
 {
-    std::unique_ptr<FetchJob_Curl> pHeaderFetcher(new FetchJob_Curl(singleUrl));
-    std::unique_ptr<FetchJob_Curl> pFetcher(new FetchJob_Curl(singleUrl));
+    FetchJob_Curl headerFetcher(singleUrl);
+    FetchJob_Curl fetcher(singleUrl);
 
-    int filetime = pHeaderFetcher->getFiletime();
+    int filetime = headerFetcher.getFiletime();
 
-    bool res = pFetcher->download();
+    bool res = fetcher.download();
 
     if (res == false)
     {
@@ -76,15 +75,15 @@ std::shared_ptr<json> ListingFetch_XmltvSe::fetchUrl(const std::string& singleUr
     }
     else
     {
-        DEBUG_PRINT("Read " << pFetcher->getSize() << " bytes from URL: " << singleUrl << std::endl);
+        DEBUG_PRINT("Read " << fetcher.getSize() << " bytes from URL: " << singleUrl << std::endl);
     }
 
-    auto spJsonDoc = std::make_shared<json>(json::parse(pFetcher->getData()));
+    const auto jsonDoc = json::parse(fetcher.getData());
 
-    if (spJsonDoc->is_object() && (spJsonDoc->find("jsontv") != spJsonDoc->end()))
+    if (jsonDoc.is_object() && (jsonDoc.find("jsontv") != jsonDoc.end()))
     {
         DEBUG_PRINT("Parsed a valid JSONTV document." << std::endl);
-        return spJsonDoc;
+        return jsonDoc;
     }
     else
     {
@@ -93,9 +92,9 @@ std::shared_ptr<json> ListingFetch_XmltvSe::fetchUrl(const std::string& singleUr
     }
 }
 
-std::list<std::string> ListingFetch_XmltvSe::generateUrls(unsigned int days)
+std::list<std::string> ListingFetch_XmltvSe::generateUrls(unsigned int days) const
 {
-    auto now = std::chrono::system_clock::now();
+    const auto now = std::chrono::system_clock::now();
 
     std::list<std::string> l;
 
@@ -119,91 +118,80 @@ std::list<std::string> ListingFetch_XmltvSe::generateUrls(unsigned int days)
     return std::move(l);
 }
 
-std::list<ProgrammeData> ListingFetch_XmltvSe::parseListing(std::shared_ptr<json> spJsonDoc)
+std::list<ProgrammeData> ListingFetch_XmltvSe::parseListing(const json& jsonDoc) const
 {
-    if ((spJsonDoc != nullptr) &&
-        (spJsonDoc->find("jsontv") != spJsonDoc->end()) &&
-        ((*spJsonDoc)["jsontv"].find("programme") != (*spJsonDoc)["jsontv"].end()))
+    if ((jsonDoc == nullptr))
     {
-        const auto& programmeRoot = (*spJsonDoc)["jsontv"]["programme"];
-
-        std::list<ProgrammeData> programmeList;
-
-        for (const auto& it : programmeRoot)
-        {
-            if (it.is_object())
-            {
-                if ((it.find("title") != it.end()) &&
-                    (it.find("start") != it.end()) && (it["start"].is_string()) &&
-                    (it.find("stop") != it.end()) && (it["stop"].is_string()))
-                {
-                    const std::string desc = (it.find("desc") != it.end()) ? getLocalizedString(it["desc"]) : "" ;
-
-                    int iStart, iStop;
-                    std::string sStart = it["start"];
-                    std::string sStop = it["stop"];
-
-                    try {
-                      iStart = std::stoi(sStart);
-                      iStop = std::stoi(sStop);
-                    }
-                    catch(std::invalid_argument& ){
-                      ERROR_PRINT("Found incomplete programme entry, skipping..." << std::endl);
-                      continue;
-                    }
-                    catch(std::out_of_range& ){
-                      ERROR_PRINT("Found incomplete programme entry, skipping..." << std::endl);
-                      continue;
-                    }
-
-                    programmeList.emplace_back(getLocalizedString(it["title"]),
-                                               desc,
-                                               iStart,
-                                               iStop);
-
-                    DEBUG_PRINT("Added entry:" << getLocalizedString(it["title"]) << std::endl);
-                }
-                else
-                {
-                    ERROR_PRINT("Found incomplete programme entry, skipping..." << std::endl);
-                }
-            }
-        }
-
-        return programmeList;
-    }
-    else
-    {
+        ERROR_PRINT("Invalid programme listing!" << std::endl);
         return std::list<ProgrammeData>();
     }
+
+    try
+    {
+        jsonDoc.at("jsontv").at("programme");
+    }
+    catch (std::out_of_range&)
+    {
+        ERROR_PRINT("Invalid programme listing!" << std::endl);
+        return std::list<ProgrammeData>();
+    }
+
+    const auto& programmeRoot = jsonDoc.at("jsontv").at("programme");
+    std::list<ProgrammeData> programmeList;
+
+    for (const auto& p : programmeRoot)
+    {
+        try
+        {
+            const auto title = getLocalizedString(p.at("title"));
+            const auto desc = (p.find("desc") != p.end()) ? getLocalizedString(p["desc"]) : "";
+            const auto start = std::stoi(p.at("start").get<std::string>());
+            const auto stop = std::stoi(p.at("stop").get<std::string>());
+
+            programmeList.emplace_back(title, desc, start, stop);
+            DEBUG_PRINT("Added entry:" << title << std::endl);
+        }
+        catch (std::invalid_argument& )
+        {
+          ERROR_PRINT("Found incomplete programme entry, skipping..." << std::endl);
+        }
+        catch (std::out_of_range& )
+        {
+          ERROR_PRINT("Found incomplete programme entry, skipping..." << std::endl);
+        }
+        catch (std::domain_error& )
+        {
+          ERROR_PRINT("Found incomplete programme entry, skipping..." << std::endl);
+        }
+    }
+
+    return programmeList;
 }
 
-std::string ListingFetch_XmltvSe::getLocalizedString(const json &itemList, const std::string& language)
+std::string ListingFetch_XmltvSe::getLocalizedString(const json &itemList, const std::string& language) const
 {
+    const std::string ret = "";
+
     if (!itemList.is_object())
     {
         ERROR_PRINT("Not an object (for language-specific strings)" << std::endl);
         return "";
     }
 
-    if ((language != "") && (itemList.find(language) != itemList.end()) && itemList[language].is_string())
+    if ((language != "") && (itemList.find(language) != itemList.end()))
     {
-        return itemList[language];
+        return itemList.at(language).get<std::string>();
     }
-    else if ((itemList.find(m_defaultLanguage) != itemList.end()) && itemList[m_defaultLanguage].is_string())
+    else if ((m_defaultLanguage != "") && (itemList.find(m_defaultLanguage) != itemList.end()))
     {
-        return itemList[m_defaultLanguage];
+        return itemList.at(m_defaultLanguage).get<std::string>();
+    }
+    else if(ret.size() > 0)
+    {
+        return itemList.begin()->get<std::string>();
     }
     else
     {
-        auto it = itemList.begin();
-        if ((it != itemList.end()) && it->is_string())
-        {
-            return (*it);
-        }
-        else
-        {
-            return "";
-        }
+        return "";
     }
 }

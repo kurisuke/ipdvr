@@ -22,7 +22,6 @@
 #define IPDVR_LISTINGFETCH_XMLTVSE_H
 
 #include "json/json.hpp"
-#include <memory>
 #include <string>
 #include <list>
 
@@ -37,14 +36,14 @@ public:
     ListingFetch_XmltvSe(const ChannelData& channelData, const std::string& defaultLanguage="de");
     ~ListingFetch_XmltvSe();
 
-    std::list<ProgrammeData> fetch();
+    std::list<ProgrammeData> fetch() const;
 
 private:
-    std::list<std::string> generateUrls(unsigned int days);
-    std::shared_ptr<json> fetchUrl(const std::string& singleUrl);
-    std::list<ProgrammeData> parseListing(std::shared_ptr<json> spJsonDoc);
+    std::list<std::string> generateUrls(unsigned int days) const;
+    json fetchUrl(const std::string& singleUrl) const;
+    std::list<ProgrammeData> parseListing(const json& jsonDoc) const;
 
-    std::string getLocalizedString(const json& itemList, const std::string& language="");
+    std::string getLocalizedString(const json& itemList, const std::string& language="") const;
 
     ChannelData m_channelData;
     std::string m_defaultLanguage;
