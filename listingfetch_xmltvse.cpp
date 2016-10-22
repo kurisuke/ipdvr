@@ -28,6 +28,8 @@
 #include <future>
 #include <sstream>
 
+namespace ipdvr {
+
 ListingFetch_XmltvSe::ListingFetch_XmltvSe(const ChannelData& channelData, const ListingParse_Jsontv& jsontvParser)
   : m_channelData(channelData),
     m_jsontvParser(jsontvParser)
@@ -112,3 +114,5 @@ std::list<std::string> ListingFetch_XmltvSe::generateUrls(unsigned int days) con
 
     return std::move(l);
 }
+
+} // namespace ipdvr

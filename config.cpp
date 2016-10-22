@@ -31,6 +31,8 @@
 
 using json = nlohmann::json;
 
+namespace ipdvr {
+
 Config::Config()
 {
     m_path = std::string(getenv("HOME")) + "/.config/ipdvr/config.json";
@@ -142,3 +144,5 @@ const ChannelData::StdList& Config::getChannelData()
 {
     return m_channelDataList;
 }
+
+} // namespace ipdvr

@@ -23,6 +23,8 @@
 #include <cstdlib>
 #include <cstring>
 
+namespace ipdvr {
+
 FetchJob_Curl::FetchJob_Curl(const std::string & sUrl)
     : m_fetchResult(),
       m_hCurl(0)
@@ -125,3 +127,5 @@ size_t FetchJob_Curl::cbDummy(void *ptr, size_t size, size_t nmemb, void *data)
   (void)data;
   return (size_t)(size * nmemb);
 }
+
+} // namespace ipdvr

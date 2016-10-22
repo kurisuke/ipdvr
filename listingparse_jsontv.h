@@ -30,6 +30,8 @@
 
 using json = nlohmann::json;
 
+namespace ipdvr {
+
 class ListingParse_Jsontv
 {
 public:
@@ -43,5 +45,7 @@ private:
 
     std::string m_defaultLanguage;
 };
+
+} // namespace ipdvr
 
 #endif // IPDVR_LISTINGPARSE_JSONTV_H

@@ -21,10 +21,11 @@
 #ifndef IPDVR_LISTINGUPDATER_H
 #define IPDVR_LISTINGUPDATER_H
 
-
 #include <memory>
 
 #include "config.h"
+
+namespace ipdvr {
 
 class ListingUpdater
 {
@@ -36,5 +37,7 @@ public:
 private:
     std::shared_ptr<Config> m_spConfig;
 };
+
+} // namespace ipdvr
 
 #endif // IPDVR_LISTINGUPDATER_H

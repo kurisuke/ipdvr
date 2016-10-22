@@ -25,6 +25,8 @@
 
 #include "programmedata.h"
 
+namespace ipdvr {
+
 struct DownloadedFile
 {
     std::string name;
@@ -42,5 +44,7 @@ class IListingFetch
 public:
     virtual ListingFetchResult fetch() const = 0;
 };
+
+} // namespace ipdvr
 
 #endif // IPDVR_ILISTINGFETCH_H

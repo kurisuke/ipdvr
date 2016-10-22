@@ -25,6 +25,8 @@
 #include <list>
 #include <string>
 
+namespace ipdvr {
+
 struct ProgrammeData
 {
     typedef std::list<ProgrammeData> StdList;
@@ -51,5 +53,7 @@ struct ProgrammeData
         valid(false)
     {}
 };
+
+} // namespace ipdvr
 
 #endif // IPDVR_PROGRAMMEDATA_H

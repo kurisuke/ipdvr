@@ -22,6 +22,8 @@
 
 #include "debug.h"
 
+namespace ipdvr {
+
 ListingParse_Jsontv::ListingParse_Jsontv(const std::string &defaultLanguage)
  : m_defaultLanguage(defaultLanguage)
 {
@@ -39,7 +41,7 @@ std::list<ProgrammeData> ListingParse_Jsontv::parseListing(const std::string& da
     {
         jsonDoc.at("jsontv").at("programme");
     }
-    catch (std::out_of_range&)
+    catch (std::logic_error&)
     {
         ERROR_PRINT("Invalid programme listing!" << std::endl);
         return std::list<ProgrammeData>();
@@ -105,3 +107,4 @@ std::string ListingParse_Jsontv::getLocalizedString(const json &itemList, const 
     }
 }
 
+} // namespace ipdvr

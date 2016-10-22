@@ -23,6 +23,8 @@
 #include "debug.h"
 #include "listingfetch_xmltvse.h"
 
+namespace ipdvr {
+
 ListingUpdater::ListingUpdater(std::shared_ptr<Config> spConfig)
     : m_spConfig(spConfig)
 {
@@ -42,3 +44,5 @@ void ListingUpdater::updateAll()
         auto res = fetcher.fetch();
     }
 }
+
+} // namespace ipdvr

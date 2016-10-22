@@ -25,6 +25,8 @@
 
 #include <string>
 
+namespace ipdvr {
+
 class Config
 {
 public:
@@ -42,5 +44,7 @@ private:
 
     ChannelData::StdList m_channelDataList;
 };
+
+} // namespace ipdvr
 
 #endif // IPDVR_CONFIG_H

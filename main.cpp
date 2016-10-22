@@ -54,21 +54,21 @@ int main(int argc, char* argv[])
     }
 
     // try to parse config, exit if fail
-    std::shared_ptr<Config> spConfig;
+    std::shared_ptr<ipdvr::Config> spConfig;
     if (options.count("config"))
     {
-        spConfig = std::make_shared<Config>(options["config"].as<std::string>());
+        spConfig = std::make_shared<ipdvr::Config>(options["config"].as<std::string>());
     }
     else
     {
-        spConfig = std::make_shared<Config>();
+        spConfig = std::make_shared<ipdvr::Config>();
     }
     if (spConfig->parse() == false)
     {
         return 1;
     }
 
-    auto spListingUpdater = std::make_shared<ListingUpdater>(spConfig);
+    auto spListingUpdater = std::make_shared<ipdvr::ListingUpdater>(spConfig);
     spListingUpdater->updateAll();
 
     curl_global_cleanup();

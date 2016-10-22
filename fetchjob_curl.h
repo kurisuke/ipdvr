@@ -25,6 +25,8 @@
 
 #include <curl/curl.h>
 
+namespace ipdvr {
+
 class FetchJob_Curl
 {
 public:
@@ -49,5 +51,7 @@ private:
 
     CURL* m_hCurl;
 };
+
+} // namespace ipdvr
 
 #endif // IPDVR_FETCHJOB_CURL_H

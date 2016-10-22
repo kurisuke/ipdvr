@@ -21,7 +21,6 @@
 #ifndef IPDVR_LISTINGFETCH_XMLTVSE_H
 #define IPDVR_LISTINGFETCH_XMLTVSE_H
 
-#include "contrib/json/json.hpp"
 #include <string>
 #include <list>
 
@@ -29,9 +28,8 @@
 
 #include "channeldata.h"
 #include "listingparse_jsontv.h"
-#include "programmedata.h"
 
-using json = nlohmann::json;
+namespace ipdvr {
 
 class ListingFetch_XmltvSe : public IListingFetch
 {
@@ -48,5 +46,7 @@ private:
     ChannelData m_channelData;
     const ListingParse_Jsontv& m_jsontvParser;
 };
+
+} // namespace ipdvr
 
 #endif // IPDVR_LISTINGFETCH_XMLTVSE_H

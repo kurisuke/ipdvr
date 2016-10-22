@@ -24,6 +24,8 @@
 #include <list>
 #include <string>
 
+namespace ipdvr {
+
 struct ChannelData
 {
     enum class ListingType
@@ -52,5 +54,7 @@ struct ChannelData
           listingType(ListingType::Invalid),
           listingName("") {}
 };
+
+} // namespace ipdvr
 
 #endif // IPDVR_CHANNELDATA_H
