@@ -24,7 +24,7 @@
 
 #include <algorithm>
 #include <fstream>
-#include "json/json.hpp"
+#include "contrib/json/json.hpp"
 #include <map>
 #include <sstream>
 

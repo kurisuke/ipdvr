@@ -25,8 +25,8 @@ detailed list of requirements / proposed building blocks.
 Attributions
 ------------
 
-ipdvr includes the following 3rd-party libraries:
+ipdvr includes the following 3rd-party code:
 
-- json/json.hpp -- JSON parser
+- contrib/json/json.hpp -- JSON parser
     - https://github.com/nlohmann/json
     - license: COPYING.json

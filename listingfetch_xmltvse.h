@@ -21,7 +21,7 @@
 #ifndef IPDVR_LISTINGFETCH_XMLTVSE_H
 #define IPDVR_LISTINGFETCH_XMLTVSE_H
 
-#include "json/json.hpp"
+#include "contrib/json/json.hpp"
 #include <string>
 #include <list>
 
