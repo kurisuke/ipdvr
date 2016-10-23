@@ -20,8 +20,8 @@
 
 #include "listingfetch_xmltvse.h"
 
-#include "debug.h"
-#include "fetchjob_curl.h"
+#include <ipdvr/debug.h>
+#include <ipdvr/fetchjob_curl.h>
 
 #include <chrono>
 #include <ctime>

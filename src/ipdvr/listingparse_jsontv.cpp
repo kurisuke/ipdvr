@@ -20,7 +20,7 @@
 
 #include "listingparse_jsontv.h"
 
-#include "debug.h"
+#include <ipdvr/debug.h>
 
 namespace ipdvr {
 

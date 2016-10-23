@@ -20,8 +20,8 @@
 
 #include "listingupdater.h"
 
-#include "debug.h"
-#include "listingfetch_xmltvse.h"
+#include <ipdvr/debug.h>
+#include <ipdvr/listingfetch_xmltvse.h>
 
 namespace ipdvr {
 

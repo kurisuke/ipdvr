@@ -20,12 +20,12 @@
 
 #include "config.h"
 
-#include "debug.h"
+#include <contrib/json/json.hpp>
+#include <ipdvr/debug.h>
 
 #include <algorithm>
 #include <cstdlib>
 #include <fstream>
-#include "contrib/json/json.hpp"
 #include <map>
 #include <sstream>
 

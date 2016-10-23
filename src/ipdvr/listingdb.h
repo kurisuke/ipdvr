@@ -21,10 +21,10 @@
 #ifndef IPDVR_LISTINGDB_H
 #define IPDVR_LISTINGDB_H
 
-#include <memory>
+#include <ipdvr/ilistingfetch.h>
+#include <ipdvr/programmedata.h>
 
-#include "ilistingfetch.h"
-#include "programmedata.h"
+#include <memory>
 
 namespace ipdvr {
 

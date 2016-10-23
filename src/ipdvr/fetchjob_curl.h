@@ -21,9 +21,8 @@
 #ifndef IPDVR_FETCHJOB_CURL_H
 #define IPDVR_FETCHJOB_CURL_H
 
-#include <string>
-
 #include <curl/curl.h>
+#include <string>
 
 namespace ipdvr {
 

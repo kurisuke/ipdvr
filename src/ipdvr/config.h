@@ -21,7 +21,7 @@
 #ifndef IPDVR_CONFIG_H
 #define IPDVR_CONFIG_H
 
-#include "channeldata.h"
+#include <ipdvr/channeldata.h>
 
 #include <string>
 

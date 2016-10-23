@@ -20,10 +20,10 @@
 
 #include "listingdb.h"
 
-#include "debug.h"
+#include <contrib/sqlite3pp/sqlite3pp.h>
+#include <ipdvr/debug.h>
 
 #include <algorithm>
-#include "contrib/sqlite3pp/sqlite3pp.h"
 #include <cstdlib>
 #include <mutex>
 #include <sys/stat.h>

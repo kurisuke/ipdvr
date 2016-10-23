@@ -23,8 +23,8 @@
 
 #include <memory>
 
-#include "config.h"
-#include "listingdb.h"
+#include <ipdvr/config.h>
+#include <ipdvr/listingdb.h>
 
 namespace ipdvr {
 

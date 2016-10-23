@@ -18,14 +18,13 @@
  *
  */
 
-#include "config.h"
-#include "listingdb.h"
-#include "listingupdater.h"
+#include <contrib/cxxopts/cxxopts.hpp>
+#include <ipdvr/config.h>
+#include <ipdvr/listingdb.h>
+#include <ipdvr/listingupdater.h>
 
-#include <memory>
-
-#include "contrib/cxxopts/cxxopts.hpp"
 #include <curl/curl.h>
+#include <memory>
 
 int main(int argc, char* argv[])
 {

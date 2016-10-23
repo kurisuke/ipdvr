@@ -21,12 +21,12 @@
 #ifndef IPDVR_LISTINGPARSE_JSONTV_H
 #define IPDVR_LISTINGPARSE_JSONTV_H
 
-#include "contrib/json/json.hpp"
+#include <contrib/json/json.hpp>
+#include <ipdvr/channeldata.h>
+#include <ipdvr/programmedata.h>
+
 #include <string>
 #include <list>
-
-#include "channeldata.h"
-#include "programmedata.h"
 
 using json = nlohmann::json;
 

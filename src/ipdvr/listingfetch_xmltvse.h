@@ -24,11 +24,10 @@
 #include <string>
 #include <list>
 
-#include "ilistingfetch.h"
-
-#include "channeldata.h"
-#include "listingdb.h"
-#include "listingparse_jsontv.h"
+#include <ipdvr/channeldata.h>
+#include <ipdvr/ilistingfetch.h>
+#include <ipdvr/listingdb.h>
+#include <ipdvr/listingparse_jsontv.h>
 
 namespace ipdvr {
 

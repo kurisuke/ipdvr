@@ -21,9 +21,9 @@
 #ifndef IPDVR_ILISTINGFETCH_H
 #define IPDVR_ILISTINGFETCH_H
 
-#include <list>
+#include <ipdvr/programmedata.h>
 
-#include "programmedata.h"
+#include <list>
 
 namespace ipdvr {
 
