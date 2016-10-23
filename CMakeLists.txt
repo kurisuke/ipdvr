@@ -2,16 +2,16 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 PROJECT(ipdvr)
 
 SET(SOURCES
-    channeldata.h
-    config.cpp
-    fetchjob_curl.cpp
-    ilistingfetch.h
-    listingdb.cpp
-    listingfetch_xmltvse.cpp
-    listingparse_jsontv.cpp
-    listingupdater.cpp
-    main.cpp
-    programmedata.h
+    src/ipdvr/channeldata.h
+    src/ipdvr/config.cpp
+    src/ipdvr/fetchjob_curl.cpp
+    src/ipdvr/ilistingfetch.h
+    src/ipdvr/listingdb.cpp
+    src/ipdvr/listingfetch_xmltvse.cpp
+    src/ipdvr/listingparse_jsontv.cpp
+    src/ipdvr/listingupdater.cpp
+    src/ipdvr/main.cpp
+    src/ipdvr/programmedata.h
     )
 
 ADD_EXECUTABLE(ipdvr ${SOURCES})
