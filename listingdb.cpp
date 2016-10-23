@@ -42,6 +42,8 @@ class ListingDb::Impl
         bool insertProgramme(const ProgrammeData& programme);
         bool insertDownloaded(const DownloadedFile& downloaded);
 
+        bool deletePastProgrammes();
+
         int getDownloadedTime(const std::string& url);
 
     private:
@@ -73,6 +75,11 @@ bool ListingDb::insertProgramme(const ProgrammeData &programme)
 bool ListingDb::insertDownloaded(const DownloadedFile &downloaded)
 {
     return m_upImpl->insertDownloaded(downloaded);
+}
+
+bool ListingDb::deletePastProgrammes()
+{
+    return m_upImpl->deletePastProgrammes();
 }
 
 int ListingDb::getDownloadedTime(const std::string& url)
@@ -204,6 +211,18 @@ bool ListingDb::Impl::insertDownloaded(const DownloadedFile& downloaded)
     sqlite3pp::command cmd(*m_upDb, "REPLACE INTO downloaded (url, time) VALUES (?, ?)");
     cmd.bind(1, downloaded.name, sqlite3pp::nocopy);
     cmd.bind(2, downloaded.time);
+
+    return cmd.execute();
+}
+
+bool ListingDb::Impl::deletePastProgrammes()
+{
+    std::lock_guard<std::mutex> lock(m_mtxDb);
+
+    int now = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+
+    sqlite3pp::command cmd(*m_upDb, "DELETE FROM programmes WHERE stop < ?");
+    cmd.bind(1, now);
 
     return cmd.execute();
 }

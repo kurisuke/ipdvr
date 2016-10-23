@@ -40,6 +40,8 @@ public:
     bool insertProgramme(const ProgrammeData& programme);
     bool insertDownloaded(const DownloadedFile& downloaded);
 
+    bool deletePastProgrammes();
+
     int getDownloadedTime(const std::string& url);
 
 private:

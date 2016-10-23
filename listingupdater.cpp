@@ -57,6 +57,8 @@ void ListingUpdater::updateAll()
                    " -- Downloaded " << res.downloadedFiles.size() << " files with "
                    << res.programmes.size() << " programmes" << std::endl);
     }
+
+    m_spListingDb->deletePastProgrammes();
 }
 
 } // namespace ipdvr
