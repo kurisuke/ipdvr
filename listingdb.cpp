@@ -185,7 +185,7 @@ bool ListingDb::Impl::insertProgramme(const ProgrammeData &programme)
 {
     std::lock_guard<std::mutex> lock(m_mtxDb);
 
-    sqlite3pp::command cmd(*m_upDb, "INSERT INTO programmes (id, channel, title, desc, start, stop) VALUES "
+    sqlite3pp::command cmd(*m_upDb, "REPLACE INTO programmes (id, channel, title, desc, start, stop) VALUES "
                                   "(?, ?, ?, ?, ?, ?)");
     cmd.bind(1, (long long int) hashProgramme(programme));
     cmd.bind(2, programme.channel, sqlite3pp::nocopy);
@@ -194,18 +194,18 @@ bool ListingDb::Impl::insertProgramme(const ProgrammeData &programme)
     cmd.bind(5, programme.startSeconds());
     cmd.bind(6, programme.stopSeconds());
 
-    cmd.execute();
+    return cmd.execute();
 }
 
 bool ListingDb::Impl::insertDownloaded(const DownloadedFile& downloaded)
 {
     std::lock_guard<std::mutex> lock(m_mtxDb);
 
-    sqlite3pp::command cmd(*m_upDb, "INSERT INTO downloaded (url, time) VALUES "
-                                  "(?, ?)");
+    sqlite3pp::command cmd(*m_upDb, "REPLACE INTO downloaded (url, time) VALUES (?, ?)");
     cmd.bind(1, downloaded.name, sqlite3pp::nocopy);
     cmd.bind(2, downloaded.time);
-    cmd.execute();
+
+    return cmd.execute();
 }
 
 size_t ListingDb::Impl::hashProgramme(const ProgrammeData& programme) const
