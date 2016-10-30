@@ -32,6 +32,7 @@ class ListingDb
 {
 public:
     ListingDb();
+    ListingDb(const std::string& dbFile);
     ~ListingDb();
 
     ListingDb(ListingDb&& op);

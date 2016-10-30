@@ -35,6 +35,7 @@ class ListingDb::Impl
 {
     public:
         Impl();
+        Impl(const std::string& dbFile);
         ~Impl();
         Impl(const Impl&) = delete;
         Impl& operator=(const Impl&) = delete;
@@ -61,6 +62,11 @@ class ListingDb::Impl
 
 ListingDb::ListingDb()
   : m_upImpl(new ListingDb::Impl())
+{
+}
+
+ListingDb::ListingDb(const std::string& dbFile)
+  : m_upImpl(new ListingDb::Impl(dbFile))
 {
 }
 
