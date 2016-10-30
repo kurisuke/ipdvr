@@ -205,8 +205,43 @@ bool ListingDb::Impl::insertProgramme(const ProgrammeData &programme)
 {
     std::lock_guard<std::mutex> lock(m_mtxDb);
 
+    // find (possible) first overlapping element
+    std::string overlapFirstQryStr = "SELECT id, start, stop FROM programmes WHERE channel = '" + programme.channel +
+                                     "' AND start <= " + std::to_string(programme.startSeconds()) +
+                                     " AND stop > " + std::to_string(programme.startSeconds());
+
+    sqlite3pp::query overlapFirstQry(*m_upDb, overlapFirstQryStr.c_str());
+    long long int overlapFirstId = 0;
+    int overlapFirstStart, overlapFirstStop;
+    for (auto row : overlapFirstQry)
+    {
+        row.getter() >> overlapFirstId >> overlapFirstStart >> overlapFirstStop;
+    }
+
+    // find (possible) last overlapping element
+    std::string overlapLastQryStr = "SELECT id, start, stop FROM programmes WHERE channel = '" + programme.channel +
+                                    "' AND start < " + std::to_string(programme.stopSeconds()) +
+                                    " AND stop > " + std::to_string(programme.stopSeconds());
+
+    sqlite3pp::query overlapLastQry(*m_upDb, overlapLastQryStr.c_str());
+    long long int overlapLastId = 0;
+    int overlapLastStart, overlapLastStop;
+    for (auto row : overlapLastQry)
+    {
+        row.getter() >> overlapLastId >> overlapLastStart >> overlapLastStop;
+    }
+
+    // delete all elements between first and last overlapping
+    if ((overlapFirstId != 0) && (overlapLastId != 0))
+    {
+        sqlite3pp::command cmd(*m_upDb, "DELETE FROM programmes where channel = ? AND start >= ? AND stop <= ?");
+        cmd.bind(1, programme.channel, sqlite3pp::nocopy);
+        cmd.bind(2, overlapFirstStart);
+        cmd.bind(3, overlapLastStop);
+    }
+
     sqlite3pp::command cmd(*m_upDb, "REPLACE INTO programmes (id, channel, title, desc, start, stop) VALUES "
-                                  "(?, ?, ?, ?, ?, ?)");
+                                    "(?, ?, ?, ?, ?, ?)");
     cmd.bind(1, (long long int) hashProgramme(programme));
     cmd.bind(2, programme.channel, sqlite3pp::nocopy);
     cmd.bind(3, programme.title, sqlite3pp::nocopy);
