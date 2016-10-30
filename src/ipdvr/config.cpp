@@ -69,7 +69,7 @@ ChannelData::StdList parseChannels(const json& channelsroot)
 
                 const auto listingType = listingTypeMap.at(listingTypeStr);
 
-                ret.push_back(ChannelData(name, streamUrl, listingType, listingName));
+                ret.emplace_back(name, streamUrl, listingType, listingName);
                 DEBUG_PRINT("Added new channel entry: " << name << std::endl);
 
             }
