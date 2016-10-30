@@ -51,9 +51,10 @@ class ListingDb::Impl
         bool bDbOpen = false;
         std::mutex m_mtxDb;
 
+        void createTables();
         void createProgrammesTable();
         void createDownloadedTable();
-        bool createPath( mode_t mode, const std::string rootPath, const std::string path );
+        bool createPath(mode_t mode, const std::string& rootPath, const std::string& path);
 
         size_t hashProgramme(const ProgrammeData& programme) const;
 };
@@ -96,6 +97,18 @@ ListingDb::Impl::Impl()
     createPath(S_IRWXU, baseDir, subDir);
     m_upDb = std::unique_ptr<sqlite3pp::database>(new sqlite3pp::database(dbFile.c_str()));
 
+    createTables();
+}
+
+ListingDb::Impl::Impl(const std::string& dbFile)
+{
+    m_upDb = std::unique_ptr<sqlite3pp::database>(new sqlite3pp::database(dbFile.c_str()));
+
+    createTables();
+}
+
+void ListingDb::Impl::createTables()
+{
     // check for table programmes and recreate if necessary
     try
     {
@@ -118,7 +131,7 @@ ListingDb::Impl::Impl()
         createProgrammesTable();
     }
 
-    // check for table programmes and recreate if necessary
+    // check for table downloaded and recreate if necessary
     try
     {
         sqlite3pp::query qry(*m_upDb, "SELECT * FROM downloaded");
@@ -157,7 +170,7 @@ void ListingDb::Impl::createDownloadedTable()
     m_upDb->execute("CREATE TABLE downloaded (url VARCHAR PRIMARY KEY NOT NULL, time INTEGER NOT NULL)");
 }
 
-bool ListingDb::Impl::createPath( mode_t mode, const std::string rootPath, const std::string path )
+bool ListingDb::Impl::createPath(mode_t mode, const std::string& rootPath, const std::string& path)
 {
     struct stat st;
 
