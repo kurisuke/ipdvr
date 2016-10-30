@@ -1,0 +1,30 @@
+GET /json
+
+GET /json/version
+
+
+GET /json/listing/channel/(str)
+
+GET /json/listing/channel/(str)/count/(int)/
+
+GET /json/listing/channel/(str)/start/(YYYY)/(MM)/(DD)/(HH)/(MM)
+
+GET /json/listing/channel/(str)/start/(YYYY)/(MM)/(DD)/(HH)/(MM)/count/(int)
+
+GET /json/listing
+
+GET /json/listing/start/(YYYY)/(MM)/(DD)/(HH)/(MM)
+
+
+GET /json/programme/(id)
+
+
+GET /json/recording
+
+POST /json/recording
+
+GET /json/recording/(id)
+
+POST /json/recording/(id)
+
+DELETE /json/recording/(id)
