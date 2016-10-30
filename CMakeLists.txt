@@ -10,17 +10,20 @@ set(SOURCES
     src/ipdvr/listingfetch_xmltvse.cpp
     src/ipdvr/listingparse_jsontv.cpp
     src/ipdvr/listingupdater.cpp
-    src/ipdvr/main.cpp
     src/ipdvr/programmedata.h
     )
 
-add_executable(ipdvr ${SOURCES})
-target_compile_features(ipdvr PRIVATE cxx_auto_type)
-target_compile_features(ipdvr PRIVATE cxx_lambdas)
-target_include_directories(ipdvr PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
+add_library(ipdvr ${SOURCES})
+add_executable(ipdvr-bin src/ipdvr/main.cpp)
+target_link_libraries(ipdvr-bin ipdvr)
+set_target_properties(ipdvr-bin PROPERTIES OUTPUT_NAME ipdvr)
+
+target_compile_features(ipdvr PUBLIC cxx_auto_type)
+target_compile_features(ipdvr PUBLIC cxx_lambdas)
+target_include_directories(ipdvr PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 if(CMAKE_BUILD_TYPE MATCHES Debug)
-    target_compile_definitions(ipdvr PRIVATE -DDEBUG)
+    target_compile_definitions(ipdvr PUBLIC -DDEBUG)
 endif()
 
 # Multi-Threading
@@ -32,7 +35,7 @@ target_link_libraries(ipdvr ${CMAKE_THREAD_LIBS_INIT})
 
 find_package(CURL)
 if(CURL_FOUND)
-    target_include_directories(ipdvr PRIVATE ${CURL_INCLUDE_DIRS})
+    target_include_directories(ipdvr PUBLIC ${CURL_INCLUDE_DIRS})
     target_link_libraries(ipdvr ${CURL_LIBRARIES})
 else()
     message(FATAL_ERROR "Could not find libcurl.")
@@ -48,3 +51,19 @@ if(SQLITE3_INCLUDE_DIR AND SQLITE3_LIBRARY)
 else()
     message(FATAL_ERROR "Could not find libsqlite3.")
 endif()
+
+# Test suite
+
+option(IPDVR_TESTSUITE "Build all tests." OFF)
+
+if(IPDVR_TESTSUITE)
+    add_subdirectory(lib/gtest)
+    enable_testing()
+
+    include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
+
+    add_executable(listingdb_test test/ipdvr/listingdb_test.cpp)
+    target_link_libraries(listingdb_test gtest gtest_main)
+    target_link_libraries(listingdb_test ipdvr)
+
+endif() # IPDVR_TESTSUITE
