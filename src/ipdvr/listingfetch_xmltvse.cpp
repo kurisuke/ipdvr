@@ -75,7 +75,7 @@ ListingFetchResult ListingFetch_XmltvSe::fetchUrl(const std::string& singleUrl) 
 
     if(filetime == m_spListingDb->getDownloadedTime(singleUrl))
     {
-        DEBUG_PRINT("Already downloaded: " << singleUrl << std::endl);
+        DEBUG_PRINT("Already downloaded: " << singleUrl << " db:" << m_spListingDb->getDownloadedTime(singleUrl) << " server:" << filetime << std::endl);
         return {std::list<ProgrammeData>(), std::list<DownloadedFile>()};
     }
 
@@ -111,8 +111,8 @@ std::list<std::string> ListingFetch_XmltvSe::generateUrls(unsigned int days) con
         s << "http://json.xmltv.se/"
           << m_channelData.listingName << "_"
           << utc_tm.tm_year + 1900 << "-"
-          << utc_tm.tm_mon + 1 << "-"
-          << utc_tm.tm_mday
+          << std::setw(2) << std::setfill('0') << utc_tm.tm_mon + 1 << "-"
+          << std::setw(2) << std::setfill('0') << utc_tm.tm_mday
           << ".js.gz";
 
         l.push_back(s.str());
